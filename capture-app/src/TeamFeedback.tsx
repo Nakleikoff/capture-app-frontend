@@ -9,6 +9,7 @@ const questions = [
   { id: 4, text: "Did you take initiative on new tasks or projects?" },
   { id: 5, text: "Did you seek feedback to improve your work?" },
   { id: 8, text: "Did you support company values in your daily work?" }
+  { id: 9, text: "Did you support personal values in your daily work?" }
 ]
 
 export default function TeamFeedback() {
