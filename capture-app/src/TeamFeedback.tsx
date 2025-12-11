@@ -1,14 +1,14 @@
 import React from 'react'
 import ExpandableSection from './components/Expandable/ExpandableSection'
 import { Controller, useForm } from 'react-hook-form';
-import { FormControl, FormControlLabel, FormLabel, Radio, RadioGroup, TextField } from '@mui/material';
+import { FormControl, FormControlLabel, Radio, RadioGroup, TextField } from '@mui/material';
 
 const questions = [
-  { id: 1, text: "What is your name?" },
-  { id: 2, text: "What is your favorite color?" },
-  { id: 4, text: "Describe your experience." },
-  { id: 5, text: "Describe your experience." },
-  { id: 8, text: "Describe your experience." }
+  { id: 1, text: "Did you meet your performance goals for this period?" },
+  { id: 2, text: "Did you collaborate effectively with your team?" },
+  { id: 4, text: "Did you take initiative on new tasks or projects?" },
+  { id: 5, text: "Did you seek feedback to improve your work?" },
+  { id: 8, text: "Did you support company values in your daily work?" }
 ]
 
 export default function TeamFeedback() {
@@ -37,14 +37,14 @@ export default function TeamFeedback() {
     console.log(data);
   };
   const onError = (errors: any) => {
-  console.log("❌ VALIDATION BLOCKED SUBMIT", errors);
-};
+    console.log("VALIDATION BLOCKED SUBMIT", errors);
+  };
+
   return (
-    <div className="questions-list">
+    <div>
       <form onSubmit={handleSubmit(onSubmit, onError)}>
         {questions.map((question, index) => (
           <ExpandableSection key={question.id} header={<>{question.text}</>}>
-            {/* Ensure questionId is always included */}
             <Controller
               name={`responses.${index}.questionId`}
               control={control}
@@ -53,9 +53,7 @@ export default function TeamFeedback() {
                 <input type="hidden" {...field} value={question.id} />
               )}
             />
-            <FormControl>
-              <FormLabel>Did you complete the task?</FormLabel>
-
+            <FormControl sx={{ display: 'flex' }}>
               <Controller
                 name={`responses.${index}.decision`}
                 control={control}
@@ -70,7 +68,6 @@ export default function TeamFeedback() {
               />
 
             </FormControl>
-
             <br />
 
             <Controller
@@ -86,11 +83,9 @@ export default function TeamFeedback() {
                 />
               )}
             />
-
-
           </ExpandableSection>
         ))}
-        <button type="submit">Submit Review</button>
+        <button type="submit">Save Reviews</button>
 
       </form>
     </div>
