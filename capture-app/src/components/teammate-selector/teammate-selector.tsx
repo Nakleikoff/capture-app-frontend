@@ -16,7 +16,7 @@ export default function TeammateSelector() {
     { label: "Alexey", id: 6 },
   ])
 
-  const [selectedTeammate, setSelectedTeammate] = useState<Teammate | null>(
+  const [selectedTeammate, setSelectedTeammate] = useState<Teammate | null | string>(
     null
   )
   const [inputValue, setInputValue] = useState("")
@@ -54,7 +54,7 @@ export default function TeammateSelector() {
           setInputValue(newInputValue)
         }}
         value={selectedTeammate}
-        onChange={(event, newValue: Teammate | null) => {
+        onChange={(event, newValue: Teammate | null | string) => {
           setSelectedTeammate(newValue)
         }}
       />
