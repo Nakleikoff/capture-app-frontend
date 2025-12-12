@@ -1,6 +1,6 @@
 import "./App.css"
 import TeammateSelector from "./components/teammate-selector/teammate-selector"
-import TabsCollection from "./components/tab-group/tab-group"
+import TabGroup from "./components/tab-group/tab-group"
 import TeamFeedback from "./TeamFeedback"
 import { useEffect, useState } from "react"
 import { getMockTeammateFeedback, submitTeammateFeedback, type FeedbackCategory, type TeammateFeedbackResponse } from "./api/feedback"
@@ -43,14 +43,14 @@ function App() {
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <TeammateSelector setTeammateId={setTeammateId} />
-      <TabsCollection items={categories.map((category, catIdx) => {
+      <TabGroup items={categories.map((category, catIdx) => {
         return {
           panelChildren: <TeamFeedback
             category={category}
             control={control}
             catIdx={catIdx}
           />,
-          title: `${category.categoryName}`
+          title: category.categoryName
         }
       })} />
       <button type="submit">Save All</button>

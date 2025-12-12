@@ -52,13 +52,13 @@ export default function TabGroup({ items }: TabGroupProps) {
       <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
         <Tabs value={value} onChange={handleChange} centered>
           {items.map((tabItem, index) => (
-            <Tab key={index} label={tabItem.title} {...a11yProps(index)} />
+            <Tab key={tabItem.title} label={tabItem.title} {...a11yProps(index)} />
           ))}
         </Tabs>
       </Box>
       {items.map((tab, index) => {
         return (
-          <CustomTabPanel value={value} index={index}>
+          <CustomTabPanel key={tab.title} value={value} index={index}>
             {tab.panelChildren}
           </CustomTabPanel>
         )
