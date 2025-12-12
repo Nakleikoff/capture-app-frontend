@@ -12,7 +12,6 @@ type ITeamFeedbackProps = {
 
 export default function TeamFeedback({ category, control, catIdx }: ITeamFeedbackProps) {
   return (
-
     <div>
       {category.questions.map((question, qIdx) => (
         <ExpandableSection key={question.id} header={<Typography variant="h6" component="div">{question.text}</Typography>}>
@@ -54,7 +53,6 @@ export default function TeamFeedback({ category, control, catIdx }: ITeamFeedbac
           />
         </ExpandableSection>
       ))}
-
     </div>
   );
 }
