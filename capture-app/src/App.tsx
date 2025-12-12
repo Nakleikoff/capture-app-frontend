@@ -5,15 +5,21 @@ import TeamFeedback from "./TeamFeedback"
 import { useEffect, useState } from "react"
 import { getMockTeammateFeedback, submitTeammateFeedback, type FeedbackCategory, type TeammateFeedbackResponse } from "./api/feedback"
 import { useForm } from "react-hook-form"
+import Snackbar from '@mui/material/Snackbar';
+import Alert from '@mui/material/Alert';
 
 type FormValues = {
   responses: FeedbackCategory[];
 };
 
+
 function App() {
   const [feedbackData, setFeedbackData] = useState<TeammateFeedbackResponse | null>(null);
   const categories = feedbackData?.data.feedback || [];
   const [teammateId, setTeammateId] = useState<number>(1);
+  const [loading, setLoading] = useState(false);
+  const [toastOpen, setToastOpen] = useState(false);
+  const [toastMsg, setToastMsg] = useState('');
 
   const { handleSubmit, control, reset } = useForm<FormValues>({
     defaultValues: {
@@ -34,26 +40,39 @@ function App() {
 
 
   const onSubmit = async (data: FormValues) => {
-    await submitTeammateFeedback({
-      teammateId: teammateId,
-      feedback: data.responses
-    });
+    setLoading(true);
+    try {
+      await submitTeammateFeedback({
+        teammateId: teammateId,
+        feedback: data.responses
+      });
+      setToastMsg('Feedback submitted!');
+      setToastOpen(true);
+    } catch (e) {
+      setToastMsg('Submission failed.');
+      setToastOpen(true);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <TeammateSelector setTeammateId={setTeammateId} />
-      <TabGroup items={categories.map((category, catIdx) => {
-        return {
-          panelChildren: <TeamFeedback
-            category={category}
-            control={control}
-            catIdx={catIdx}
-          />,
-          title: category.categoryName
-        }
-      })} />
-      <button type="submit">Save All</button>
+      <TabGroup items={categories.map((category, catIdx) => ({
+        panelChildren: <TeamFeedback
+          category={category}
+          control={control}
+          catIdx={catIdx}
+        />,
+        title: category.categoryName
+      }))} />
+      <button type="submit" disabled={loading}>{loading ? 'Submitting...' : 'Submit'}</button>
+      <Snackbar open={toastOpen} autoHideDuration={3000} onClose={() => setToastOpen(false)} anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}>
+        <Alert onClose={() => setToastOpen(false)} severity="success" sx={{ width: '100%' }}>
+          {toastMsg}
+        </Alert>
+      </Snackbar>
     </form>
   )
 }
