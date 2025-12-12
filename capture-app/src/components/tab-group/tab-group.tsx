@@ -50,7 +50,18 @@ export default function TabGroup({ items }: TabGroupProps) {
   return (
     <Box sx={{ width: "100%" }}>
       <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-        <Tabs value={value} onChange={handleChange} centered>
+        <Tabs
+          value={value}
+          onChange={handleChange}
+          centered
+          sx={{
+            "& .MuiTab-root:focus": {
+              outline: "none",
+              boxShadow: "none",
+              border: "none"
+            }
+          }}
+        >
           {items.map((tabItem, index) => (
             <Tab
               key={`tab-${index}`}
