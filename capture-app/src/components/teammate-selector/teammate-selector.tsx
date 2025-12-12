@@ -5,7 +5,7 @@ type Teammate = {
   label: string
   id: number
 }
-export default function TeammateSelector() {
+export default function TeammateSelector({ setTeammateId } : { setTeammateId: React.Dispatch<React.SetStateAction<number>> }) {
   // TODO:   change to an API cal
   const [teammates, setTeammates] = useState<Teammate[]>([
     { label: "Mitchell", id: 1 },
@@ -56,6 +56,7 @@ export default function TeammateSelector() {
         value={selectedTeammate}
         onChange={(event, newValue: Teammate | null | string) => {
           setSelectedTeammate(newValue)
+          setTeammateId(newValue && typeof newValue === "object" ? newValue.id : 0)
         }}
       />
       <Button

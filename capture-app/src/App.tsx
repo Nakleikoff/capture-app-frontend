@@ -13,6 +13,7 @@ type FormValues = {
 function App() {
   const [feedbackData, setFeedbackData] = useState<TeammateFeedbackResponse | null>(null);
   const categories = feedbackData?.data.feedback || [];
+  const [teammateId, setTeammateId] = useState<number>(1);
 
   const { handleSubmit, control, reset } = useForm<FormValues>({
     defaultValues: {
@@ -22,26 +23,26 @@ function App() {
 
   useEffect(() => {
     async function getData() {
-      const result = await getMockTeammateFeedback();
+      const result = await getMockTeammateFeedback(teammateId);
       if (result.success) {
         setFeedbackData(result);
         reset({ responses: result.data.feedback });
       }
     }
     getData();
-  }, [reset]);
+  }, [reset, teammateId]);
 
 
   const onSubmit = async (data: FormValues) => {
     await submitTeammateFeedback({
-      teammateId: 1,
+      teammateId: teammateId,
       feedback: data.responses
     });
   };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <TeammateSelector />
+      <TeammateSelector setTeammateId={setTeammateId} />
       <TabsCollection items={categories.map((category, catIdx) => {
         return {
           panelChildren: <TeamFeedback
