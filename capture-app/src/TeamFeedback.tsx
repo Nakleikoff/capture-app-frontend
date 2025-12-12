@@ -4,40 +4,80 @@ import { Controller, useForm } from 'react-hook-form';
 import { FormControl, FormControlLabel, Radio, RadioGroup, TextField, Typography } from '@mui/material';
 
 
-const questions = [
-  { id: 1, text: "Did you meet your performance goals for this period?" },
-  { id: 2, text: "Did you collaborate effectively with your team?" },
-  { id: 4, text: "Did you take initiative on new tasks or projects?" },
-  { id: 5, text: "Did you seek feedback to improve your work?" },
-  { id: 8, text: "Did you support company values in your daily work?" },
-  { id: 9, text: "Did you support personal values in your daily work?" },
-];
 
-const mockAnswers: QuestionResponse[] = [
-  { questionId: 1, decision: "yes", note: "Achieved all my goals this period." },
-  { questionId: 2, decision: "no", note: "Need to work on communication." },
-  { questionId: 4, decision: "not_sure", note: "Some tasks were unclear." },
-  { questionId: 5, decision: "yes", note: "Asked for feedback from peers." },
-  { questionId: 8, decision: "yes", note: "Aligned with company values." },
-  { questionId: 9, decision: "not_sure", note: "Personal values not always relevant." },
+const mockQuestionAnswers: QuestionResponse[] = [
+  {
+    id: 1,
+    text: "Did you meet your performance goals for this period?",
+    answer: {
+      value: "yes", comment: "Achieved all my goals this period."
+    }
+  },
+  {
+    id: 2,
+    text: "Did you collaborate effectively with your team?",
+    answer: {
+      value: "no", comment: "Need to work on communication."
+    }
+  },
+  {
+    id: 4,
+    text: "Did you collaborate effectively with your team?",
+    answer: {
+      value: "not_sure", comment: "Some tasks were unclear."
+    },
+  }, {
+    id: 5,
+    text: "Did you seek feedback to improve your work?",
+    answer: {
+      value: "yes", comment: "Asked for feedback from peers."
+    }
+  },
+  {
+    id: 8,
+    text: "Did you collaborate effectively with your team?",
+    answer: {
+      value: "yes", comment: "Aligned with company values."
+    },
+  }, {
+    id: 9,
+    text: "Did you collaborate effectively with your team?",
+    answer: {
+      value: "not_sure", comment: "Personal values not always relevant."
+    }
+  },
 ];
+// get feedback/teamId
+
+async function getTeammateFeedback(teamMateId: number): Promise<QuestionResponse[]> {
+  const response = await fetch(`/api/feedback/${teamMateId}`);
+  const data = await response.json();
+  return data;
+}
 
 type QuestionResponse = {
-  questionId: number;
-  decision: "yes" | "no" | "not_sure";
-  note: string;
+  id: number;
+  text: string;
+  answer: Answer
+}
+
+type Answer = {
+  value: "yes" | "no" | "not_sure";
+  comment: string;
 }
 type FormValues = {
   responses: QuestionResponse[];
 };
 
 export default function TeamFeedback() {
-  const defaultResponses: QuestionResponse[] = questions.map(q => {
-    const answer = mockAnswers.find(a => a.questionId === q.id);
+  const defaultResponses: QuestionResponse[] = mockQuestionAnswers.map(a => {
     return {
-      questionId: q.id,
-      decision: answer ? answer.decision : "not_sure",
-      note: answer ? answer.note : ""
+      id: a.id,
+      answer: {
+        value: a.answer.value,
+        comment: a.answer.comment
+      },
+      text: a.text
     };
   });
 
@@ -58,10 +98,10 @@ export default function TeamFeedback() {
   return (
     <div>
       <form onSubmit={handleSubmit(onSubmit, onError)}>
-        {questions.map((question, index) => (
+        {defaultResponses.map((question, index) => (
           <ExpandableSection key={question.id} header={<Typography variant="h6" component="div">{question.text}</Typography>}>
             <Controller
-              name={`responses.${index}.questionId`}
+              name={`responses.${index}.id`}
               control={control}
               defaultValue={question.id}
               render={({ field }) => (
@@ -70,7 +110,7 @@ export default function TeamFeedback() {
             />
             <FormControl sx={{ display: 'flex' }}>
               <Controller
-                name={`responses.${index}.decision`}
+                name={`responses.${index}.answer.value`}
                 control={control}
                 render={({ field }) => (
                   <RadioGroup {...field} row>
@@ -86,7 +126,7 @@ export default function TeamFeedback() {
             <br />
 
             <Controller
-              name={`responses.${index}.note`}
+              name={`responses.${index}.answer.comment`}
               control={control}
               render={({ field }) => (
                 <TextField
