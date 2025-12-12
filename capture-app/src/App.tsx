@@ -37,7 +37,6 @@ function App() {
       teammateId: 1,
       feedback: data.responses
     });
-    console.log(data);
   };
 
   return (
