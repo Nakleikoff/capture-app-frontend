@@ -1,34 +1,60 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import "./App.css"
+import TeammateSelector from "./components/teammate-selector/teammate-selector"
+import TabGroup from "./components/tab-group/tab-group"
+import TeamFeedback from "./TeamFeedback"
+import { useEffect, useState } from "react"
+import { getMockTeammateFeedback, submitTeammateFeedback, type FeedbackCategory, type TeammateFeedbackResponse } from "./api/feedback"
+import { useForm } from "react-hook-form"
+
+type FormValues = {
+  responses: FeedbackCategory[];
+};
 
 function App() {
-  const [count, setCount] = useState(0);
+  const [feedbackData, setFeedbackData] = useState<TeammateFeedbackResponse | null>(null);
+  const categories = feedbackData?.data.feedback || [];
+  const [teammateId, setTeammateId] = useState<number>(1);
+
+  const { handleSubmit, control, reset } = useForm<FormValues>({
+    defaultValues: {
+      responses: categories 
+    }
+  });
+
+  useEffect(() => {
+    async function getData() {
+      const result = await getMockTeammateFeedback(teammateId);
+      if (result.success) {
+        setFeedbackData(result);
+        reset({ responses: result.data.feedback });
+      }
+    }
+    getData();
+  }, [reset, teammateId]);
+
+
+  const onSubmit = async (data: FormValues) => {
+    await submitTeammateFeedback({
+      teammateId: teammateId,
+      feedback: data.responses
+    });
+  };
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    <form onSubmit={handleSubmit(onSubmit)}>
+      <TeammateSelector setTeammateId={setTeammateId} />
+      <TabGroup items={categories.map((category, catIdx) => {
+        return {
+          panelChildren: <TeamFeedback
+            category={category}
+            control={control}
+            catIdx={catIdx}
+          />,
+          title: category.categoryName
+        }
+      })} />
+      <button type="submit">Save All</button>
+    </form>
   )
 }
 
