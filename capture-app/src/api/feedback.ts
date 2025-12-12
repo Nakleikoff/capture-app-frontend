@@ -37,7 +37,6 @@ export async function getMockTeammateFeedback(teammateId: number): Promise<Teamm
                 questions: [
                     { id: 1, text: "Did Mitchell meet his performance goals for this period?", answer: { value: "yes", comment: "Exceeded expectations." } },
                     { id: 2, text: "Did Mitchell collaborate effectively with his team?", answer: { value: "no", comment: "Needs improvement." } },
-                    { id: 3, text: "Did Mitchell complete his assigned tasks on time?", answer: { value: "yes", comment: "All tasks delivered early." } },
                     { id: 4, text: "Did Mitchell show initiative in his work?", answer: { value: "yes", comment: "Proactively solved problems." } }
                 ]
             },
