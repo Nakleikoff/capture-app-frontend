@@ -30,7 +30,7 @@ export default function TeammateSelector({ setTeammateId } : { setTeammateId: Re
       const highestId = Math.max(...teammates.map((t) => t.id), 0)
       setTeammates((prevTeammates) => [
         ...prevTeammates,
-        { label: inputValue, id: highestId },
+        { label: inputValue, id: highestId + 1 },
       ])
       setInputValue("")
     }
