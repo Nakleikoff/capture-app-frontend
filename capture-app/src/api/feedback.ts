@@ -2,7 +2,7 @@ export type Answer = { value: "yes" | "no" | "not_sure" | undefined, comment: st
 
 export type Question = { id: number, text: string, answer?: Answer };
 
-export type FeedbackCategory = { id: number, name: string, questions: Question[] };
+export type FeedbackCategory = { id: number, categoryName: string, questions: Question[] };
 
 export type TeammateFeedbackResponse = {
     success: boolean,
@@ -11,6 +11,11 @@ export type TeammateFeedbackResponse = {
         feedback: FeedbackCategory[]
     }
 };
+
+export type TeammateFeedbackRequest = {
+    teammateId: number;
+    feedback: FeedbackCategory[];
+}
 
 export async function getMockTeammateFeedback(): Promise<TeammateFeedbackResponse> {
     return new Promise(resolve => {
@@ -22,7 +27,7 @@ export async function getMockTeammateFeedback(): Promise<TeammateFeedbackRespons
                     feedback: [
                         {
                             id: 101,
-                            name: "Performance",
+                            categoryName: "Performance",
                             questions: [
                                 { id: 1, text: "Did you meet your performance goals for this period?", answer: { value: "yes", comment: "Exceeded expectations." } },
                                 { id: 2, text: "Did you collaborate effectively with your team?", answer: { value: "no", comment: "Needs improvement." } },
@@ -32,7 +37,7 @@ export async function getMockTeammateFeedback(): Promise<TeammateFeedbackRespons
                         },
                         {
                             id: 102,
-                            name: "Values",
+                            categoryName: "Values",
                             questions: [
                                 { id: 8, text: "Did you support company values in your daily work?", answer: { value: "yes", comment: "Always aligned." } },
                                 { id: 9, text: "Did you support personal values in your daily work?", answer: { value: "not_sure", comment: "Sometimes." } },
@@ -41,7 +46,7 @@ export async function getMockTeammateFeedback(): Promise<TeammateFeedbackRespons
                         },
                         {
                             id: 103,
-                            name: "Growth",
+                            categoryName: "Growth",
                             questions: [
                                 { id: 11, text: "Did you seek feedback to improve your work?", answer: { value: "yes", comment: "Asked for feedback from peers." } },
                                 { id: 12, text: "Did you participate in training or learning opportunities?", answer: { value: "no", comment: "No time this quarter." } },
@@ -50,7 +55,7 @@ export async function getMockTeammateFeedback(): Promise<TeammateFeedbackRespons
                         },
                         {
                             id: 104,
-                            name: "Engagement",
+                            categoryName: "Engagement",
                             questions: [
                                 { id: 14, text: "Did you attend team meetings regularly?", answer: { value: "yes", comment: "Perfect attendance." } },
                                 { id: 15, text: "Did you contribute ideas in meetings?", answer: { value: "no", comment: "Prefer to listen." } },
@@ -62,4 +67,14 @@ export async function getMockTeammateFeedback(): Promise<TeammateFeedbackRespons
             });
         }, 500);
     });
+}
+
+
+export async function submitTeammateFeedback(request: TeammateFeedbackRequest): Promise<{ success: boolean }> {
+    return new Promise(resolve => {
+        setTimeout(() => {
+            console.log("Submitted:", request);
+            resolve({ success: true });
+        }, 500);
+    })
 }
