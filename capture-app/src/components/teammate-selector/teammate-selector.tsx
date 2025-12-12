@@ -1,6 +1,6 @@
 import { useState } from "react"
 import styles from "./teammate-selector.module.css"
-import { Autocomplete, Button, Paper, TextField } from "@mui/material"
+import { Autocomplete, Button, TextField } from "@mui/material"
 type Teammate = {
   label: string
   id: number
@@ -26,7 +26,7 @@ export default function TeammateSelector() {
       inputValue &&
       !teammates.some((teammate) => teammate.label === inputValue)
     ) {
-      // this is just dummy code. This will change to an API call to add a teammate
+      // this is just dummy code for adding a teammate to the list. This will change to an API call to add a teammate
       const highestId = Math.max(...teammates.map((t) => t.id), 0)
       setTeammates((prevTeammates) => [
         ...prevTeammates,

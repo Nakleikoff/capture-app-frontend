@@ -32,13 +32,15 @@ function a11yProps(index: number) {
   }
 }
 
-interface TabsCollectionProps {
-  content: {
-    title: string
-    panelChildren: React.ReactNode
-  }[]
+type TabItem = {
+  title: string
+  panelChildren: React.ReactNode
 }
-export default function TabCollection({ content }: TabsCollectionProps) {
+
+interface TabGroupProps {
+  items: TabItem[]
+}
+export default function TabGroup({ items }: TabGroupProps) {
   const [value, setValue] = React.useState(0)
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
@@ -49,12 +51,12 @@ export default function TabCollection({ content }: TabsCollectionProps) {
     <Box sx={{ width: "100%" }}>
       <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
         <Tabs value={value} onChange={handleChange} centered>
-          {content.map((tab, index) => (
-            <Tab label={tab.title} {...a11yProps(index)} />
+          {items.map((tabItem, index) => (
+            <Tab key={index} label={tabItem.title} {...a11yProps(index)} />
           ))}
         </Tabs>
       </Box>
-      {content.map((tab, index) => {
+      {items.map((tab, index) => {
         return (
           <CustomTabPanel value={value} index={index}>
             {tab.panelChildren}
