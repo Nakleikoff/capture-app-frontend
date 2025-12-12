@@ -2,82 +2,23 @@ import React from 'react'
 import ExpandableSection from './components/Expandable/ExpandableSection'
 import { Controller, useForm } from 'react-hook-form';
 import { FormControl, FormControlLabel, Radio, RadioGroup, TextField, Typography } from '@mui/material';
+import type { Question } from './api/feedback';
 
-
-
-const mockQuestionAnswers: QuestionResponse[] = [
-  {
-    id: 1,
-    text: "Did you meet your performance goals for this period?",
-    answer: {
-      value: "yes", comment: "Achieved all my goals this period."
-    }
-  },
-  {
-    id: 2,
-    text: "Did you collaborate effectively with your team?",
-    answer: {
-      value: "no", comment: "Need to work on communication."
-    }
-  },
-  {
-    id: 4,
-    text: "Did you collaborate effectively with your team?",
-    answer: {
-      value: "not_sure", comment: "Some tasks were unclear."
-    },
-  }, {
-    id: 5,
-    text: "Did you seek feedback to improve your work?",
-    answer: {
-      value: "yes", comment: "Asked for feedback from peers."
-    }
-  },
-  {
-    id: 8,
-    text: "Did you collaborate effectively with your team?",
-    answer: {
-      value: "yes", comment: "Aligned with company values."
-    },
-  }, {
-    id: 9,
-    text: "Did you collaborate effectively with your team?",
-    answer: {
-      value: "not_sure", comment: "Personal values not always relevant."
-    }
-  },
-];
-// get feedback/teamId
-
-async function getTeammateFeedback(teamMateId: number): Promise<QuestionResponse[]> {
-  const response = await fetch(`/api/feedback/${teamMateId}`);
-  const data = await response.json();
-  return data;
-}
-
-type QuestionResponse = {
-  id: number;
-  text: string;
-  answer: Answer
-}
-
-type Answer = {
-  value: "yes" | "no" | "not_sure";
-  comment: string;
-}
 type FormValues = {
-  responses: QuestionResponse[];
+  responses: Question[];
 };
-
-export default function TeamFeedback() {
-  const defaultResponses: QuestionResponse[] = mockQuestionAnswers.map(a => {
+type ITeamFeedbackResponse = {
+  questions: Question[]
+}
+export default function TeamFeedback({ questions }: ITeamFeedbackResponse) {
+  const defaultResponses: Question[] = questions.map(question => {
     return {
-      id: a.id,
+      id: question.id,
       answer: {
-        value: a.answer.value,
-        comment: a.answer.comment
+        value: question.answer?.value,
+        comment: question.answer?.comment
       },
-      text: a.text
+      text: question.text
     };
   });
 
