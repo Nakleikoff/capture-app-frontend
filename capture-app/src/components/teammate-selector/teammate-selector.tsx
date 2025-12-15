@@ -1,12 +1,30 @@
 import { useState } from "react"
 import styles from "./teammate-selector.module.css"
 import { Autocomplete, Button, TextField } from "@mui/material"
+import { useForm } from "react-hook-form"
+
 type Teammate = {
   label: string
   id: number
 }
-export default function TeammateSelector({ setTeammateId } : { setTeammateId: React.Dispatch<React.SetStateAction<number>> }) {
-  // TODO:   change to an API cal
+
+type Inputs = {
+  teammateName: string
+}
+export default function TeammateSelector({
+  setTeammateId,
+}: {
+  setTeammateId: React.Dispatch<React.SetStateAction<number>>
+}) {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<Inputs>({
+    mode: "onBlur",
+  })
+
+  // TODO:   change to an API call
   const [teammates, setTeammates] = useState<Teammate[]>([
     { label: "Mitchell", id: 1 },
     { label: "Luke", id: 2 },
@@ -16,9 +34,9 @@ export default function TeammateSelector({ setTeammateId } : { setTeammateId: Re
     { label: "Alexey", id: 6 },
   ])
 
-  const [selectedTeammate, setSelectedTeammate] = useState<Teammate | null | string>(
-    null
-  )
+  const [selectedTeammate, setSelectedTeammate] = useState<
+    Teammate | null | string
+  >(null)
   const [inputValue, setInputValue] = useState("")
 
   const handleAddTeammate = () => {
@@ -42,13 +60,35 @@ export default function TeammateSelector({ setTeammateId } : { setTeammateId: Re
   const noResults = filtered.length === 0
 
   return (
-    <div className={styles.selectorWrapper}>
+    <form
+      className={styles.selectorWrapper}
+      onSubmit={handleSubmit(handleAddTeammate)}
+    >
       <Autocomplete
         disablePortal
         freeSolo
         options={teammates}
         sx={{ width: 300 }}
-        renderInput={(params) => <TextField {...params} label="Teammate" />}
+        renderInput={(params) => (
+          <TextField
+            {...params}
+            label="Teammate"
+            {...register("teammateName", {
+              required: "Please select or add a teammate.",
+              maxLength: 30,
+              minLength: {
+                value: 1,
+                message: "bloo blah",
+              },
+              pattern: {
+                value: /^[A-Za-z]+$/i,
+                message: "A teammate name can only contain letters.",
+              },
+            })}
+            error={errors.teammateName ? true : false}
+            helperText={errors.teammateName?.message}
+          />
+        )}
         inputValue={inputValue}
         onInputChange={(event, newInputValue) => {
           setInputValue(newInputValue)
@@ -56,16 +96,15 @@ export default function TeammateSelector({ setTeammateId } : { setTeammateId: Re
         value={selectedTeammate}
         onChange={(event, newValue: Teammate | null | string) => {
           setSelectedTeammate(newValue)
-          setTeammateId(newValue && typeof newValue === "object" ? newValue.id : 0)
+          setTeammateId(
+            newValue && typeof newValue === "object" ? newValue.id : 0
+          )
         }}
       />
-      <Button
-        onClick={() => handleAddTeammate()}
-        disabled={!noResults}
-        variant="contained"
-      >
+
+      <Button type="submit" disabled={!noResults} variant="contained">
         Add
       </Button>
-    </div>
+    </form>
   )
 }
