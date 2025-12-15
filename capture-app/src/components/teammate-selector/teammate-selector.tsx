@@ -1,16 +1,18 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import styles from "./teammate-selector.module.css"
 import { Autocomplete, Button, TextField } from "@mui/material"
 import { useForm } from "react-hook-form"
-
-type Teammate = {
-  label: string
-  id: number
-}
+import { getTeammates, type Teammate } from "../../api/teammates"
 
 type Inputs = {
   teammateName: string
 }
+
+type AutocompleteOption = {
+  id: number
+  label: string
+}
+
 export default function TeammateSelector({
   setTeammateId,
 }: {
@@ -21,21 +23,14 @@ export default function TeammateSelector({
     handleSubmit,
     formState: { errors },
   } = useForm<Inputs>({
-    mode: "onBlur",
+    mode: "onChange",
   })
 
   // TODO:   change to an API call
-  const [teammates, setTeammates] = useState<Teammate[]>([
-    { label: "Mitchell", id: 1 },
-    { label: "Luke", id: 2 },
-    { label: "Lesego", id: 3 },
-    { label: "Nigel", id: 4 },
-    { label: "Saxon", id: 5 },
-    { label: "Alexey", id: 6 },
-  ])
+  const [teammates, setTeammates] = useState<AutocompleteOption[]>([])
 
   const [selectedTeammate, setSelectedTeammate] = useState<
-    Teammate | null | string
+    AutocompleteOption | null | string
   >(null)
   const [inputValue, setInputValue] = useState("")
 
@@ -54,10 +49,28 @@ export default function TeammateSelector({
     }
   }
 
-  const filtered = teammates.filter((t) =>
-    t.label.toLowerCase().includes(inputValue.toLowerCase())
+  const filtered = teammates.filter((teammate) =>
+    teammate.label.toLowerCase().includes(inputValue.toLowerCase())
   )
   const noResults = filtered.length === 0
+
+  useEffect(() => {
+    async function getData() {
+      const res = await getTeammates()
+
+      if (res.success) {
+        const options: AutocompleteOption[] = res.data.list.map(
+          ({ id, name }) => {
+            return { id, label: name }
+          }
+        )
+        setTeammates(options)
+        console.log(res)
+      }
+    }
+
+    getData()
+  }, [])
 
   return (
     <form
@@ -94,17 +107,18 @@ export default function TeammateSelector({
           setInputValue(newInputValue)
         }}
         value={selectedTeammate}
-        onChange={(event, newValue: Teammate | null | string) => {
+        onChange={(event, newValue: AutocompleteOption | null | string) => {
           setSelectedTeammate(newValue)
           setTeammateId(
             newValue && typeof newValue === "object" ? newValue.id : 0
           )
         }}
       />
-
-      <Button type="submit" disabled={!noResults} variant="contained">
-        Add
-      </Button>
+      <div className={styles.buttonWrapper}>
+        <Button type="submit" disabled={!noResults} variant="contained">
+          Add
+        </Button>
+      </div>
     </form>
   )
 }
