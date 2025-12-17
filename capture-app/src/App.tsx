@@ -8,7 +8,7 @@ import { useForm } from "react-hook-form"
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
 
-type FormValues = {
+export type FormValues = {
   responses: FeedbackCategory[];
 };
 
