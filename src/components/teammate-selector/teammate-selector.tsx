@@ -103,11 +103,14 @@ export default function TeammateSelector({
           />
         )}
         inputValue={inputValue}
-        onInputChange={(event, newInputValue) => {
+        onInputChange={(_: React.SyntheticEvent, newInputValue) => {
           setInputValue(newInputValue)
         }}
         value={selectedTeammate}
-        onChange={(event, newValue: AutocompleteOption | null | string) => {
+        onChange={(
+          _: React.SyntheticEvent,
+          newValue: AutocompleteOption | null | string
+        ) => {
           setSelectedTeammate(newValue)
           setTeammateId(
             newValue && typeof newValue === "object" ? newValue.id : 0
