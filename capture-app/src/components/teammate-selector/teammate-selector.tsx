@@ -1,4 +1,4 @@
-import { useState } from "react"
+import React, { useState } from "react"
 import styles from "./teammate-selector.module.css"
 import { Autocomplete, Button, TextField } from "@mui/material"
 type Teammate = {
@@ -50,11 +50,11 @@ export default function TeammateSelector({ setTeammateId } : { setTeammateId: Re
         sx={{ width: 300 }}
         renderInput={(params) => <TextField {...params} label="Teammate" />}
         inputValue={inputValue}
-        onInputChange={(event, newInputValue) => {
+        onInputChange={(_: React.SyntheticEvent, newInputValue) => {
           setInputValue(newInputValue)
         }}
         value={selectedTeammate}
-        onChange={(event, newValue: Teammate | null | string) => {
+        onChange={(_: React.SyntheticEvent, newValue: Teammate | null | string) => {
           setSelectedTeammate(newValue)
           setTeammateId(newValue && typeof newValue === "object" ? newValue.id : 0)
         }}
