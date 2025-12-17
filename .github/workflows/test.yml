@@ -1,11 +1,10 @@
 name: Run tests
 
-on: 
+on:
   - push
 
 jobs:
   test:
-
     runs-on: ubuntu-latest
 
     steps:
@@ -13,13 +12,13 @@ jobs:
       - name: Use Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '24'
+          node-version: "24"
       - name: Install dependencies
-        working-directory: capture-app
+        working-directory: .
         run: npm ci
       - name: Run tests
-        working-directory: capture-app
+        working-directory: .
         run: npm test
       - name: Run build
-        working-directory: capture-app
+        working-directory: .
         run: npm run build
