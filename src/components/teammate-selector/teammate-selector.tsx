@@ -2,7 +2,7 @@ import { useEffect, useState } from "react"
 import styles from "./teammate-selector.module.css"
 import { Autocomplete, Button, TextField } from "@mui/material"
 import { useForm } from "react-hook-form"
-import { getTeammates, type Teammate } from "../../api/teammates"
+import { getTeammates } from "../../api/teammates"
 
 type Inputs = {
   teammateName: string
