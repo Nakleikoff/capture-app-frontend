@@ -48,7 +48,7 @@ function App() {
       });
       setToastMsg('Feedback submitted!');
       setToastOpen(true);
-    } catch (e) {
+    } catch {
       setToastMsg('Submission failed.');
       setToastOpen(true);
     } finally {
