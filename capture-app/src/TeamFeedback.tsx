@@ -1,13 +1,12 @@
 import ExpandableSection from './components/Expandable/ExpandableSection'
-import { Controller } from 'react-hook-form';
+import { Controller, type Control } from 'react-hook-form';
 import { FormControl, FormControlLabel, Radio, RadioGroup, TextField, Typography } from '@mui/material';
 import { type FeedbackCategory } from './api/feedback';
 
 type ITeamFeedbackProps = {
   category: FeedbackCategory;
   catIdx?: number;
-  // eslint-disable-next-line
-  control?: any;
+  control?: Control;
 };
 
 export default function TeamFeedback({ category, control, catIdx }: ITeamFeedbackProps) {
