@@ -5,6 +5,7 @@ import {
   getMockTeammateFeedback,
   submitTeammateFeedback,
   type FeedbackCategory,
+  type Question,
   type TeammateFeedbackResponse,
 } from "../../api/feedback"
 import { useForm } from "react-hook-form"
@@ -57,6 +58,17 @@ export default function FeedbackForm({ teammateId }: { teammateId: number }) {
       setLoading(false)
     }
   }
+
+  const renderQuestionsAnswered = (questions: Question[]) => {
+    const answered = questions.reduce((accumulator, question) => {
+      return (
+        accumulator +
+        (question.answer && question.answer.value !== null ? 1 : 0)
+      )
+    }, 0)
+
+    return `${answered}/${questions.length}`
+  }
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <TabGroup
@@ -68,7 +80,9 @@ export default function FeedbackForm({ teammateId }: { teammateId: number }) {
               catIdx={catIdx}
             />
           ),
-          title: category.categoryName,
+          title: `${category.categoryName} ${renderQuestionsAnswered(
+            category.questions
+          )}`,
         }))}
       />
       <button type="submit" disabled={loading}>
