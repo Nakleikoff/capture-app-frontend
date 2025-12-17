@@ -15,8 +15,9 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '24'
-      - run: cd ./capture-app
       - name: Install dependencies
+        working-directory: capture-app
         run: npm ci
       - name: Run tests
+        working-directory: capture-app
         run: npm test
