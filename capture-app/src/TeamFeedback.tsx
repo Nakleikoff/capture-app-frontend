@@ -1,13 +1,13 @@
-import React from 'react'
 import ExpandableSection from './components/Expandable/ExpandableSection'
-import { Controller } from 'react-hook-form';
+import { Controller, type Control } from 'react-hook-form';
 import { FormControl, FormControlLabel, Radio, RadioGroup, TextField, Typography } from '@mui/material';
 import { type FeedbackCategory } from './api/feedback';
+import type { FormValues } from './App';
 
 type ITeamFeedbackProps = {
   category: FeedbackCategory;
-  catIdx?: number;
-  control?: any;
+  catIdx: number;
+  control?: Control<FormValues>;
 };
 
 export default function TeamFeedback({ category, control, catIdx }: ITeamFeedbackProps) {
