@@ -1,11 +1,14 @@
-import React, { type PropsWithChildren } from "react";
-import styles from "./Expandable.module.css";
+import React, { type PropsWithChildren } from "react"
+import styles from "./Expandable.module.css"
 
 export type ExpandableSectionProps = PropsWithChildren<{
-  header: React.JSX.Element;
-}>;
+  header: React.JSX.Element
+}>
 
-export default function ExpandableSection({ children, header }: ExpandableSectionProps) {
+export default function ExpandableSection({
+  children,
+  header,
+}: ExpandableSectionProps) {
   return (
     <details className={styles.expandable}>
       <summary className={styles.header}>
@@ -14,7 +17,7 @@ export default function ExpandableSection({ children, header }: ExpandableSectio
           <span className={styles.arrow}>▶</span>
         </div>
       </summary>
-      <p className={styles.content}>{children}</p>
+      <div className={styles.content}>{children}</div>
     </details>
-  );
+  )
 }
