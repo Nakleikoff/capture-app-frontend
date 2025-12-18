@@ -6,7 +6,7 @@ import {
   submitTeammateFeedback,
   type FeedbackCategory,
   type Question,
-  type TeammateFeedbackResponse,
+  type TeammateFeedback,
 } from "../../api/feedback"
 import { useForm } from "react-hook-form"
 import Snackbar from "@mui/material/Snackbar"
@@ -17,10 +17,11 @@ export type FormValues = {
 }
 
 export default function FeedbackForm({ teammateId }: { teammateId: number }) {
-  const [feedbackData, setFeedbackData] =
-    useState<TeammateFeedbackResponse | null>(null)
+  const [feedbackData, setFeedbackData] = useState<TeammateFeedback | null>(
+    null
+  )
 
-  const categories = feedbackData?.data.feedback || []
+  const categories = feedbackData?.feedback || []
   const [loading, setLoading] = useState(false)
   const [toastOpen, setToastOpen] = useState(false)
   const [toastMsg, setToastMsg] = useState("")
@@ -35,7 +36,7 @@ export default function FeedbackForm({ teammateId }: { teammateId: number }) {
     async function getData() {
       const result = await getMockTeammateFeedback(teammateId)
       if (result.success) {
-        setFeedbackData(result)
+        setFeedbackData(result.data)
         reset({ responses: result.data.feedback })
       }
     }
