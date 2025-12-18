@@ -1,3 +1,5 @@
+import { getData, postData, type ApiResponse } from "./api-service"
+
 export type Answer = {
   value: "yes" | "no" | "not_sure" | null
   comment: string | undefined
@@ -11,13 +13,11 @@ export type FeedbackCategory = {
   questions: Question[]
 }
 
-export type TeammateFeedbackResponse = {
-  success: boolean
-  data: {
-    teammate: { id: number; name: string }
-    feedback: FeedbackCategory[]
-  }
+export type TeammateFeedback = {
+  teammate: { id: number; name: string }
+  feedback: FeedbackCategory[]
 }
+
 export type TeammateFeedbackRequest = {
   teammateId: number
   feedback: FeedbackCategory[]
@@ -25,7 +25,7 @@ export type TeammateFeedbackRequest = {
 
 export async function getMockTeammateFeedback(
   teammateId: number
-): Promise<TeammateFeedbackResponse> {
+): Promise<ApiResponse<TeammateFeedback>> {
   const teamMatesKey: Record<number, string> = {
     1: "Mitchell",
     2: "Luke",
@@ -517,22 +517,11 @@ export async function getMockTeammateFeedback(
     ]
   }
 
-  // const response = await fetch(
+  // const response = await getData<TeammateFeedback>(
   //   `${import.meta.env.VITE_API_URL}/feedback/${teammateId}`
   // )
 
-  // if (!response.ok) {
-  //   return {
-  //     success: false,
-  //     data: {
-  //       teammate: {
-  //         id: 0,
-  //         name: "",
-  //       },
-  //       feedback: [],
-  //     },
-  //   }
-  // }
+  // return response
 
   return new Promise((resolve) => {
     setTimeout(() => {
@@ -552,29 +541,20 @@ export async function getMockTeammateFeedback(
 
 export async function submitTeammateFeedback(
   request: TeammateFeedbackRequest
-): Promise<{ success: boolean }> {
-  // const response = await fetch(
+): Promise<ApiResponse<[]>> {
+  // const response = await postData<[]>(
   //   `${import.meta.env.VITE_API_URL}/feedback/${request.teammateId}`,
-  //   {
-  //     method: "POST",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //       Accept: "application/json",
-  //     },
-  //     body: JSON.stringify({
-  //       feedback: request.feedback,
-  //     }),
-  //   }
+  //   JSON.stringify({
+  //     feedback: request.feedback,
+  //   })
   // )
 
-  // if (!response.ok) {
-  //   return { success: false }
-  // }
+  // return response
 
   return new Promise((resolve) => {
     setTimeout(() => {
       console.log("Submitted:", request)
-      resolve({ success: true })
+      resolve({ success: true, data: [] })
     }, 500)
   })
 }
