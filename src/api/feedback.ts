@@ -517,6 +517,23 @@ export async function getMockTeammateFeedback(
     ]
   }
 
+  // const response = await fetch(
+  //   `${import.meta.env.VITE_API_URL}/feedback/${teammateId}`
+  // )
+
+  // if (!response.ok) {
+  //   return {
+  //     success: false,
+  //     data: {
+  //       teammate: {
+  //         id: 0,
+  //         name: "",
+  //       },
+  //       feedback: [],
+  //     },
+  //   }
+  // }
+
   return new Promise((resolve) => {
     setTimeout(() => {
       resolve({
@@ -536,6 +553,24 @@ export async function getMockTeammateFeedback(
 export async function submitTeammateFeedback(
   request: TeammateFeedbackRequest
 ): Promise<{ success: boolean }> {
+  // const response = await fetch(
+  //   `${import.meta.env.VITE_API_URL}/feedback/${request.teammateId}`,
+  //   {
+  //     method: "POST",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //       Accept: "application/json",
+  //     },
+  //     body: JSON.stringify({
+  //       feedback: request.feedback,
+  //     }),
+  //   }
+  // )
+
+  // if (!response.ok) {
+  //   return { success: false }
+  // }
+
   return new Promise((resolve) => {
     setTimeout(() => {
       console.log("Submitted:", request)
