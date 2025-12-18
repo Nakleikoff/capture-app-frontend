@@ -4,7 +4,7 @@ export default defineConfig({
   testDir: './tests',
   use: {
     baseURL: 'http://localhost:5173',
-    headless: process.env.HEADLESS ? true : false,
+    headless: true,
   },
 
    webServer: {
