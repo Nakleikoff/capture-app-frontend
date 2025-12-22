@@ -2,7 +2,7 @@ import TabGroup from "../../components/tab-group/tab-group"
 import TeamFeedback from "../team-feedback/TeamFeedback"
 import { useEffect, useState } from "react"
 import {
-  getMockTeammateFeedback,
+  getTeammateFeedback,
   submitTeammateFeedback,
   type FeedbackCategory,
   type Question,
@@ -34,7 +34,7 @@ export default function FeedbackForm({ teammateId }: { teammateId: number }) {
 
   useEffect(() => {
     async function getData() {
-      const result = await getMockTeammateFeedback(teammateId)
+      const result = await getTeammateFeedback(teammateId)
       if (result.success) {
         setFeedbackData(result.data)
         reset({ responses: result.data.feedback })
@@ -81,7 +81,7 @@ export default function FeedbackForm({ teammateId }: { teammateId: number }) {
               catIdx={catIdx}
             />
           ),
-          title: `${category.categoryName} ${renderQuestionsAnswered(
+          title: `${category.category.name} ${renderQuestionsAnswered(
             category.questions
           )}`,
         }))}

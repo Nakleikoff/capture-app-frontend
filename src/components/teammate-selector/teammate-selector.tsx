@@ -48,7 +48,7 @@ export default function TeammateSelector({
       if (createResponse.success) {
         const updatedTeammatesResponse = await getTeammates()
         if (updatedTeammatesResponse.success) {
-          hydrateAutoCompleteOptions(updatedTeammatesResponse.data)
+          hydrateAutoCompleteOptions(updatedTeammatesResponse.data.teammates)
         }
         setInputValue(trimmedInput)
       }
@@ -64,7 +64,7 @@ export default function TeammateSelector({
     async function getData() {
       const res = await getTeammates()
       if (res.success) {
-        hydrateAutoCompleteOptions(res.data)
+        hydrateAutoCompleteOptions(res.data.teammates)
       }
     }
 
