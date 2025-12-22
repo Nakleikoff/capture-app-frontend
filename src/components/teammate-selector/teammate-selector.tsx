@@ -60,6 +60,13 @@ export default function TeammateSelector({
   )
   const noResults = filtered.length === 0
 
+   const hydrateAutoCompleteOptions = (teammates: Teammate[]) => {
+    const options: AutocompleteOption[] = teammates.map(({ id, name }) => {
+      return { id, label: name }
+    })
+    setTeammates(options)
+  }
+
   useEffect(() => {
     async function getData() {
       const res = await getTeammates()
@@ -71,12 +78,7 @@ export default function TeammateSelector({
     getData()
   }, [])
 
-  const hydrateAutoCompleteOptions = (teammates: Teammate[]) => {
-    const options: AutocompleteOption[] = teammates.map(({ id, name }) => {
-      return { id, label: name }
-    })
-    setTeammates(options)
-  }
+ 
   return (
     <form
       className={styles.selectorWrapper}
