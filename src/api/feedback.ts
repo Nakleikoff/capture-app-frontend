@@ -29,29 +29,33 @@ export type TeammateFeedbackRequest = {
 export async function getTeammateFeedback(
   teammateId: number
 ): Promise<ApiResponse<TeammateFeedback>> {
-    const response = await getData<TeammateFeedback>(
-      `${import.meta.env.VITE_API_URL}/feedback/${teammateId}`,
-    )
-    return response;
+  const response = await getData<TeammateFeedback>(
+    `${import.meta.env.VITE_API_URL}/feedback/${teammateId}`
+  );
+  return response;
 }
 
 
 export async function submitTeammateFeedback(
   request: TeammateFeedbackRequest
 ): Promise<ApiResponse<[]>> {
-  // const response = await postData<[]>(
-  //   `${import.meta.env.VITE_API_URL}/feedback/${request.teammateId}`,
-  //   JSON.stringify({
-  //     feedback: request.feedback,
-  //   })
-  // )
+  const formattedFeedback = request.feedback.map((cat) => ({
+    categoryId: cat.category.id,
+    questions: cat.questions.map((q) => ({
+      id: q.id,
+      answer: {
+        value: typeof q.answer?.value === "number" ? q.answer.value : 0,
+        comment: typeof q.answer?.comment === "string" ? q.answer.comment : "",
+      },
+    })),
+  }));
 
-  // return response
+  const response = await postData<[]>(
+    `${import.meta.env.VITE_API_URL}/feedback/${request.teammateId}`,
+    JSON.stringify({
+      feedback: formattedFeedback,
+    })
+  );
 
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      console.log("Submitted:", request)
-      resolve({ success: true, data: [] })
-    }, 500)
-  })
+  return response;
 }
