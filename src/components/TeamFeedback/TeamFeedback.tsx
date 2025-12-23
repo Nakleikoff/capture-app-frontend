@@ -9,7 +9,7 @@ import {
   Typography,
 } from "@mui/material"
 import { type FeedbackCategory } from "../../api/feedback"
-import type { FormValues } from "../feedback-form/feedback-form"
+import type { FormValues } from "../FeedbackForm/FeedbackForm"
 
 type ITeamFeedbackProps = {
   category: FeedbackCategory
