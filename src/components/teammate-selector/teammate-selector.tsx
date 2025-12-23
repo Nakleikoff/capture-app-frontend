@@ -2,7 +2,11 @@ import { useEffect, useState } from "react"
 import styles from "./teammate-selector.module.css"
 import { Autocomplete, Button, TextField } from "@mui/material"
 import { useForm } from "react-hook-form"
-import { getTeammates } from "../../api/teammates"
+import {
+  createTeammate,
+  getTeammates,
+  type Teammate,
+} from "../../api/teammates"
 
 type Inputs = {
   teammateName: string
@@ -26,26 +30,28 @@ export default function TeammateSelector({
     mode: "onChange",
   })
 
-  // TODO:   change to an API call
   const [teammates, setTeammates] = useState<AutocompleteOption[]>([])
-
   const [selectedTeammate, setSelectedTeammate] = useState<
     AutocompleteOption | null | string
   >(null)
   const [inputValue, setInputValue] = useState("")
 
-  const handleAddTeammate = () => {
+  const handleAddTeammate = async () => {
     if (
       inputValue &&
       !teammates.some((teammate) => teammate.label === inputValue)
     ) {
-      // this is just dummy code for adding a teammate to the list. This will change to an API call to add a teammate
-      const highestId = Math.max(...teammates.map((t) => t.id), 0)
-      setTeammates((prevTeammates) => [
-        ...prevTeammates,
-        { label: inputValue, id: highestId + 1 },
-      ])
-      setInputValue("")
+      const trimmedInput = inputValue.trimEnd()
+      const createResponse = await createTeammate({
+        name: trimmedInput,
+      })
+      if (createResponse.success) {
+        const updatedTeammatesResponse = await getTeammates()
+        if (updatedTeammatesResponse.success) {
+          hydrateAutoCompleteOptions(updatedTeammatesResponse.data.teammates)
+        }
+        setInputValue(trimmedInput)
+      }
     }
   }
 
@@ -54,24 +60,25 @@ export default function TeammateSelector({
   )
   const noResults = filtered.length === 0
 
+   const hydrateAutoCompleteOptions = (teammates: Teammate[]) => {
+    const options: AutocompleteOption[] = teammates.map(({ id, name }) => {
+      return { id, label: name }
+    })
+    setTeammates(options)
+  }
+
   useEffect(() => {
     async function getData() {
       const res = await getTeammates()
-
       if (res.success) {
-        const options: AutocompleteOption[] = res.data.list.map(
-          ({ id, name }) => {
-            return { id, label: name }
-          }
-        )
-        setTeammates(options)
-        console.log(res)
+        hydrateAutoCompleteOptions(res.data.teammates)
       }
     }
 
     getData()
   }, [])
 
+ 
   return (
     <form
       className={styles.selectorWrapper}
@@ -88,14 +95,18 @@ export default function TeammateSelector({
             label="Teammate"
             {...register("teammateName", {
               required: "Please select or add a teammate.",
-              maxLength: 30,
+              maxLength: {
+                value: 30,
+                message: "Teammate name cannot be more than 30 letters long.",
+              },
               minLength: {
                 value: 1,
-                message: "bloo blah",
+                message: "That name is too short.",
               },
               pattern: {
-                value: /^[A-Za-z]+$/i,
-                message: "A teammate name can only contain letters.",
+                value: /^[a-zA-Z ]+$/i,
+                message:
+                  "A teammate name can only contain letters and can't have trailing spaces.",
               },
             })}
             error={errors.teammateName ? true : false}
@@ -118,7 +129,11 @@ export default function TeammateSelector({
         }}
       />
       <div className={styles.buttonWrapper}>
-        <Button type="submit" disabled={!noResults} variant="contained">
+        <Button
+          type="submit"
+          disabled={!noResults || errors.teammateName?.message ? true : false}
+          variant="contained"
+        >
           Add
         </Button>
       </div>

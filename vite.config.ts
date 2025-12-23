@@ -1,7 +1,13 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react-swc'
+import { mockDevServerPlugin } from 'vite-plugin-mock-dev-server'
 
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [react()],
+  plugins: [react(), mockDevServerPlugin()],
+  server: {
+    proxy: {
+      '^/api': process.env.VITE_API_URL || '',
+    },
+  },
 })

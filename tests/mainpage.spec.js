@@ -19,35 +19,35 @@ test.describe('Main Page Feedback Form', () => {
 
     test('Click through the tabs and ensure the appropriate questions have loaded', async ({ page }) => {
 
-        await page.locator('text=GROWTH').click();
+        await page.locator('text=COMMUNICATION').click();
         await expect(
-        page.locator('xpath=//*[@id="tabpanel-2"]/div/div/details[1]/summary/div/div/div')
-        ).toHaveText('Did Mitchell seek feedback to improve his work?');
+            page.locator('//*[@id="tabpanel-0"]/div/div/details[1]/summary/div/div/div')
+        ).toHaveText('Does the teammate communicate clearly and effectively?');
 
-        await page.locator('text=VALUES').click();
+        await page.locator('text=TECHNICAL SKILLS').click();
         await expect(
-        page.locator('//*[@id="tabpanel-1"]/div/div/details[1]/summary/div/div/div')
-        ).toHaveText('Did Mitchell support company values in his daily work?');
+            page.locator('//*[@id="tabpanel-1"]/div/div/details[1]/summary/div/div/div')
+        ).toHaveText('Does the teammate demonstrate strong technical abilities?');
 
-        await page.locator('text=PERFORMANCE').click();
+        await page.locator('text=TEAMWORK').click();
         await expect(
-        page.locator('//*[@id="tabpanel-0"]/div/div/details[1]/summary/div/div/div')
-        ).toHaveText('Did Mitchell meet his performance goals for this period?');
+            page.locator('//*[@id="tabpanel-2"]/div/div/details[1]/summary/div/div/div')
+        ).toHaveText('Does the teammate collaborate well with others?');
 
-        await page.locator('text=ENGAGEMENT').click();
+        await page.locator('text=PROBLEM SOLVING').click();
         await expect(
-        page.locator('//*[@id="tabpanel-3"]/div/div/details[1]/summary/div/div/div')
-        ).toHaveText('Did Mitchell attend team meetings regularly?');
+            page.locator('//*[@id="tabpanel-3"]/div/div/details[1]/summary/div/div/div')
+        ).toHaveText('Does the teammate approach problems analytically?');
     });
 
     test('Add a teammate that does not exist and ensure teammate is in the dropdown', async ({ page }) => {
 
-        await page.locator('xpath=//*[@id="_r_0_"]').fill('abcxyz');
+        await page.locator('xpath=//*[@id="_r_0_"]').fill('abcxyza');
 
         await page.locator('text=Add').click();
         
         await page.locator('xpath=//*[@id="_r_0_"]').click();
 
-        await expect(page.locator('text=abcxyz')).toBeVisible();
+        await expect(page.locator('text=abcxyza')).toBeVisible();
     });
 });
