@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import styles from "./teammate-selector.module.css"
+import styles from "./TeammateSelector.module.css"
 import { Autocomplete, Button, TextField } from "@mui/material"
 import { useForm } from "react-hook-form"
 import {
@@ -60,7 +60,7 @@ export default function TeammateSelector({
   )
   const noResults = filtered.length === 0
 
-   const hydrateAutoCompleteOptions = (teammates: Teammate[]) => {
+  const hydrateAutoCompleteOptions = (teammates: Teammate[]) => {
     const options: AutocompleteOption[] = teammates.map(({ id, name }) => {
       return { id, label: name }
     })
@@ -78,7 +78,6 @@ export default function TeammateSelector({
     getData()
   }, [])
 
- 
   return (
     <form
       className={styles.selectorWrapper}

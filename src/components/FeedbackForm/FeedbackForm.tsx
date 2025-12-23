@@ -1,5 +1,5 @@
-import TabGroup from "../../components/tab-group/tab-group"
-import TeamFeedback from "../team-feedback/TeamFeedback"
+import TabGroup from "../TabGroup/TabGroup"
+import TeamFeedback from "../TeamFeedback/TeamFeedback"
 import { useEffect, useState } from "react"
 import {
   getTeammateFeedback,
