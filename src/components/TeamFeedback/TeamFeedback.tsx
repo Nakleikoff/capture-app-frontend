@@ -1,6 +1,6 @@
-import styles from "./TeamFeedback.module.scss"
-import ExpandableSection from "../Expandable/ExpandableSection"
-import { Controller, useWatch, type Control } from "react-hook-form"
+import styles from './TeamFeedback.module.scss';
+import ExpandableSection from '../Expandable/ExpandableSection';
+import { Controller, useWatch, type Control } from 'react-hook-form';
 import {
   FormControl,
   FormControlLabel,
@@ -8,15 +8,15 @@ import {
   RadioGroup,
   TextField,
   Typography,
-} from "@mui/material"
-import { type FeedbackCategory } from "../../api/feedback"
-import type { FormValues } from "../FeedbackForm/FeedbackForm"
+} from '@mui/material';
+import { type FeedbackCategory } from '../../api/feedback';
+import type { FormValues } from '../FeedbackForm/FeedbackForm';
 
 type ITeamFeedbackProps = {
-  category: FeedbackCategory
-  catIdx: number
-  control?: Control<FormValues>
-}
+  category: FeedbackCategory;
+  catIdx: number;
+  control?: Control<FormValues>;
+};
 
 export default function TeamFeedback({
   category,
@@ -26,7 +26,7 @@ export default function TeamFeedback({
   const watchedQuestions = useWatch({
     control,
     name: `responses.${catIdx}.questions`,
-  })
+  });
   return (
     <div>
       {category.questions.map((question, qIdx) => (
@@ -94,5 +94,5 @@ export default function TeamFeedback({
         </ExpandableSection>
       ))}
     </div>
-  )
+  );
 }
