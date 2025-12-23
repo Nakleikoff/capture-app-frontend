@@ -1,4 +1,5 @@
 import * as React from 'react';
+import styles from './TabGroup.module.scss';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
@@ -20,7 +21,9 @@ function CustomTabPanel(props: TabPanelProps) {
       aria-labelledby={`tab-${index}`}
       {...other}
     >
-      {value === index && <Box sx={{ p: 3 }}>{children}</Box>}
+      {value === index && (
+        <Box className={styles.customPanelChild}>{children}</Box>
+      )}
     </div>
   );
 }

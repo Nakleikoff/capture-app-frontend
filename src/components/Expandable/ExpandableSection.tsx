@@ -1,5 +1,5 @@
 import React, { type PropsWithChildren } from 'react';
-import styles from './Expandable.module.css';
+import styles from './Expandable.module.scss';
 
 export type ExpandableSectionProps = PropsWithChildren<{
   header: React.JSX.Element;
