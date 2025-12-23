@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import styles from './teammate-selector.module.css';
+import styles from './TeammateSelector.module.scss';
 import { Autocomplete, Button, TextField } from '@mui/material';
 import { useForm } from 'react-hook-form';
 import {

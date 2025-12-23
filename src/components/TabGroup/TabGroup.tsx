@@ -1,4 +1,5 @@
 import * as React from 'react';
+import styles from './TabGroup.module.scss';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';

@@ -1,4 +1,4 @@
-import TabGroup from '../../components/tab-group/tab-group';
+import TabGroup from '../../components/TabGroup/TabGroup';
 import TeamFeedback from '../team-feedback/TeamFeedback';
 import { useEffect, useState } from 'react';
 import {
