@@ -1,3 +1,4 @@
+import styles from "./TeamFeedback.module.scss"
 import ExpandableSection from "../Expandable/ExpandableSection"
 import { Controller, useWatch, type Control } from "react-hook-form"
 import {
@@ -37,58 +38,59 @@ export default function TeamFeedback({
             </Typography>
           }
         >
-          <Controller
-            name={`responses.${catIdx}.questions.${qIdx}.id`}
-            control={control}
-            defaultValue={question.id}
-            render={({ field }) => (
-              <input type="hidden" {...field} value={question.id} />
-            )}
-          />
-          <FormControl sx={{ display: "flex" }}>
+          <div className={styles.inputsContainer}>
             <Controller
-              name={`responses.${catIdx}.questions.${qIdx}.answer.value`}
+              name={`responses.${catIdx}.questions.${qIdx}.id`}
               control={control}
+              defaultValue={question.id}
               render={({ field }) => (
-                <RadioGroup {...field} row>
-                  <FormControlLabel
-                    sx={{ color: "black" }}
-                    value="yes"
-                    control={<Radio />}
-                    label="Yes"
-                  />
-                  <FormControlLabel
-                    sx={{ color: "black" }}
-                    value="no"
-                    control={<Radio />}
-                    label="No"
-                  />
-                  <FormControlLabel
-                    sx={{ color: "black" }}
-                    value="not_sure"
-                    control={<Radio />}
-                    label="Not Sure"
-                  />
-                </RadioGroup>
+                <input type="hidden" {...field} value={question.id} />
               )}
             />
-          </FormControl>
-          <br />
-          <Controller
-            name={`responses.${catIdx}.questions.${qIdx}.answer.comment`}
-            control={control}
-            render={({ field }) => (
-              <TextField
-                {...field}
-                disabled={!watchedQuestions?.[qIdx]?.answer?.value}
-                label="Notes (optional)"
-                multiline
-                rows={4}
-                fullWidth
-                InputLabelProps={{ shrink: true }}
+            <FormControl className={styles.radioControllerWapper}>
+              <Controller
+                name={`responses.${catIdx}.questions.${qIdx}.answer.value`}
+                control={control}
+                render={({ field }) => (
+                  <RadioGroup {...field} row>
+                    <FormControlLabel
+                      className={styles.radioOption}
+                      value="yes"
+                      control={<Radio />}
+                      label="Yes"
+                    />
+                    <FormControlLabel
+                      className={styles.radioOption}
+                      value="no"
+                      control={<Radio />}
+                      label="No"
+                    />
+                    <FormControlLabel
+                      className={styles.radioOption}
+                      value="not_sure"
+                      control={<Radio />}
+                      label="Not Sure"
+                    />
+                  </RadioGroup>
+                )}
               />
-            )}
-          />
+            </FormControl>
+            <Controller
+              name={`responses.${catIdx}.questions.${qIdx}.answer.comment`}
+              control={control}
+              render={({ field }) => (
+                <TextField
+                  {...field}
+                  disabled={!watchedQuestions?.[qIdx]?.answer?.value}
+                  label="Notes (optional)"
+                  multiline
+                  rows={4}
+                  fullWidth
+                  InputLabelProps={{ shrink: true }}
+                />
+              )}
+            />
+          </div>
         </ExpandableSection>
       ))}
     </div>

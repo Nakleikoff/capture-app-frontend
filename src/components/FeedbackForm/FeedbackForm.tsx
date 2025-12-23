@@ -1,5 +1,6 @@
 import TabGroup from "../TabGroup/TabGroup"
 import TeamFeedback from "../TeamFeedback/TeamFeedback"
+import styles from "./FeedbackForm.module.scss"
 import { useEffect, useState } from "react"
 import {
   getTeammateFeedback,
@@ -98,7 +99,7 @@ export default function FeedbackForm({ teammateId }: { teammateId: number }) {
         <Alert
           onClose={() => setToastOpen(false)}
           severity="success"
-          sx={{ width: "100%" }}
+          className={styles.alert}
         >
           {toastMsg}
         </Alert>

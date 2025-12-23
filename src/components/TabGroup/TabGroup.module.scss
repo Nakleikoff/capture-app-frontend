@@ -1,0 +1,19 @@
+.tabGroupContainer {
+  width: 100%;
+}
+
+.tabGroupHeader {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+}
+
+.tabNamesContainer {
+  & :global(.MuiTab-root):focus {
+    outline: none;
+    box-shadow: none;
+    border: none;
+  }
+}
+
+.customPanelChild {
+  padding: 24px;
+}
