@@ -1,6 +1,6 @@
-import './App.css';
-import TeammateSelector from './components/teammate-selector/teammate-selector';
-import FeedbackForm from './components/feedback-form/feedback-form';
+import './App.scss';
+import TeammateSelector from './components/TeammateSelector/TeammateSelector';
+import FeedbackForm from './components/FeedbackForm/FeedbackForm';
 import { useState } from 'react';
 
 function App() {
