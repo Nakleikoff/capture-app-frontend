@@ -7,11 +7,14 @@ export default defineConfig({
     headless: process.env.HEADLESS ? true : false,
   },
 
-   webServer: {
+  webServer: {
     command: 'npm run dev',
     port: 5173,
     timeout: 120 * 1000,
     reuseExistingServer: true,
+    env: {
+      VITE_API_URL: 'http://localhost:5173/api'
+    }
   }
 });
 
