@@ -1,5 +1,5 @@
-import ExpandableSection from "../Expandable/ExpandableSection"
-import { Controller, useWatch, type Control } from "react-hook-form"
+import ExpandableSection from '../Expandable/ExpandableSection';
+import { Controller, useWatch, type Control } from 'react-hook-form';
 import {
   FormControl,
   FormControlLabel,
@@ -7,15 +7,15 @@ import {
   RadioGroup,
   TextField,
   Typography,
-} from "@mui/material"
-import { type FeedbackCategory } from "../../api/feedback"
-import type { FormValues } from "../feedback-form/feedback-form"
+} from '@mui/material';
+import { type FeedbackCategory } from '../../api/feedback';
+import type { FormValues } from '../feedback-form/feedback-form';
 
 type ITeamFeedbackProps = {
-  category: FeedbackCategory
-  catIdx: number
-  control?: Control<FormValues>
-}
+  category: FeedbackCategory;
+  catIdx: number;
+  control?: Control<FormValues>;
+};
 
 export default function TeamFeedback({
   category,
@@ -25,7 +25,7 @@ export default function TeamFeedback({
   const watchedQuestions = useWatch({
     control,
     name: `responses.${catIdx}.questions`,
-  })
+  });
   return (
     <div>
       {category.questions.map((question, qIdx) => (
@@ -45,26 +45,26 @@ export default function TeamFeedback({
               <input type="hidden" {...field} value={question.id} />
             )}
           />
-          <FormControl sx={{ display: "flex" }}>
+          <FormControl sx={{ display: 'flex' }}>
             <Controller
               name={`responses.${catIdx}.questions.${qIdx}.answer.value`}
               control={control}
               render={({ field }) => (
                 <RadioGroup {...field} row>
                   <FormControlLabel
-                    sx={{ color: "black" }}
+                    sx={{ color: 'black' }}
                     value="yes"
                     control={<Radio />}
                     label="Yes"
                   />
                   <FormControlLabel
-                    sx={{ color: "black" }}
+                    sx={{ color: 'black' }}
                     value="no"
                     control={<Radio />}
                     label="No"
                   />
                   <FormControlLabel
-                    sx={{ color: "black" }}
+                    sx={{ color: 'black' }}
                     value="not_sure"
                     control={<Radio />}
                     label="Not Sure"
@@ -92,5 +92,5 @@ export default function TeamFeedback({
         </ExpandableSection>
       ))}
     </div>
-  )
+  );
 }
