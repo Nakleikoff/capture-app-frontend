@@ -5,13 +5,14 @@ export type Teammate = {
   name: string
 }
 
-const delay = (ms: number) => {
-  return new Promise<void>((res) => setTimeout(res, ms))
+export type TeammateResponse = {
+  teammates: Teammate[];
 }
 
-export async function getTeammates(): Promise<ApiResponse<Teammate[]>> {
-  const response = await getData<Teammate[]>(
-    `${import.meta.env.VITE_API_URL}/teammates`
+
+export async function getTeammates(): Promise<ApiResponse<TeammateResponse>> {
+  const response = await getData<TeammateResponse>(
+    `${import.meta.env.VITE_API_URL}/teammates`,
   )
 
   return response
@@ -23,9 +24,10 @@ export type CreateTeammateRequest = {
 export async function createTeammate(
   request: CreateTeammateRequest
 ): Promise<ApiResponse<[]>> {
+
   const response = await postData<[]>(
     `${import.meta.env.VITE_API_URL}/teammates`,
-    JSON.stringify(request)
+    JSON.stringify({ teammate: { name: request.name } })
   )
 
   return response

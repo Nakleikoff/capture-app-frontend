@@ -48,7 +48,7 @@ export default function TeammateSelector({
       if (createResponse.success) {
         const updatedTeammatesResponse = await getTeammates()
         if (updatedTeammatesResponse.success) {
-          hydrateAutoCompleteOptions(updatedTeammatesResponse.data)
+          hydrateAutoCompleteOptions(updatedTeammatesResponse.data.teammates)
         }
         setInputValue(trimmedInput)
       }
@@ -60,23 +60,25 @@ export default function TeammateSelector({
   )
   const noResults = filtered.length === 0
 
+   const hydrateAutoCompleteOptions = (teammates: Teammate[]) => {
+    const options: AutocompleteOption[] = teammates.map(({ id, name }) => {
+      return { id, label: name }
+    })
+    setTeammates(options)
+  }
+
   useEffect(() => {
     async function getData() {
       const res = await getTeammates()
       if (res.success) {
-        hydrateAutoCompleteOptions(res.data)
+        hydrateAutoCompleteOptions(res.data.teammates)
       }
     }
 
     getData()
   }, [])
 
-  const hydrateAutoCompleteOptions = (teammates: Teammate[]) => {
-    const options: AutocompleteOption[] = teammates.map(({ id, name }) => {
-      return { id, label: name }
-    })
-    setTeammates(options)
-  }
+ 
   return (
     <form
       className={styles.selectorWrapper}
