@@ -57,6 +57,8 @@ export default function TeammateSelector({
       const res = await getTeammates();
       if (res.success) {
         setTeammates(res.data.teammates);
+        setTeammate(res.data.teammates[0] ?? null);
+        setInputValue(res.data.teammates[0].name ?? '');
       }
     }
 
