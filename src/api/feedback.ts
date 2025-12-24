@@ -57,9 +57,13 @@ export async function getTeammateFeedback(
   return response;
 }
 
+export type SubmitTeammateFeedbackResponse = {
+  reviewId: number;
+};
+
 export async function submitTeammateFeedback(
   request: TeammateFeedbackRequest,
-): Promise<ApiResponse<SubmittedFeedbackCategory>> {
+): Promise<ApiResponse<SubmitTeammateFeedbackResponse>> {
   const formattedFeedback: SubmittedFeedbackCategory[] = request.feedback
     .map((cat) => ({
       categoryId: cat.category.id,
@@ -84,13 +88,12 @@ export async function submitTeammateFeedback(
     .filter((cat) => cat.questions.length > 0);
 
   const response = await apiRequest<
-    SubmittedFeedbackCategory,
+    SubmitTeammateFeedbackResponse,
     TeammateFeedbackBody
   >(
     `feedback/${request.teammateId}`,
-    { feedback: [...formattedFeedback] },
+    { feedback: formattedFeedback },
     'POST',
   );
-
   return response;
 }

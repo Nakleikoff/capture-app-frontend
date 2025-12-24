@@ -55,8 +55,8 @@ export default function FeedbackForm({ teammate }: { teammate: Teammate }) {
       setToastMsg('Feedback submitted!');
       setToastOpen(true);
       setRefreshKey((k) => k + 1);
-    } catch (error) {
-      setToastMsg(`Submission failed: ${error}`);
+    } catch {
+      setToastMsg(`Submission failed.`);
       setToastOpen(true);
     } finally {
       setLoading(false);
