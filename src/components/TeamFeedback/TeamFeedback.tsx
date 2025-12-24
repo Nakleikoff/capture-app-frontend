@@ -50,25 +50,29 @@ export default function TeamFeedback({
             <FormControl className={styles.radioControllerWapper}>
               <Controller
                 name={`responses.${catIdx}.questions.${qIdx}.answer.value`}
-                defaultValue={question.answer?.value ?? null}
+                defaultValue={question.answer?.value ?? undefined}
                 control={control}
                 render={({ field }) => (
-                  <RadioGroup {...field} row>
+                  <RadioGroup
+                    {...field}
+                    row
+                    onChange={e => field.onChange(Number(e.target.value))}
+                  >
                     <FormControlLabel
                       className={styles.radioOption}
-                      value="yes"
+                      value={1}
                       control={<Radio />}
                       label="Yes"
                     />
                     <FormControlLabel
                       className={styles.radioOption}
-                      value="no"
+                      value={-1}
                       control={<Radio />}
                       label="No"
                     />
                     <FormControlLabel
                       className={styles.radioOption}
-                      value="not_sure"
+                      value={0}
                       control={<Radio />}
                       label="Not Sure"
                     />
