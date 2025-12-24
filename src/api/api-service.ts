@@ -2,7 +2,6 @@ export type ApiResponse<T> =
   | { success: true; data: T }
   | { success: false; error: { message: string } };
 
-
 export async function apiRequest<RES,REQ = undefined>(
   input: RequestInfo,
   body?: REQ,
