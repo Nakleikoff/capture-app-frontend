@@ -20,10 +20,15 @@ export async function getTeammates(): Promise<ApiResponse<TeammateResponse>> {
 export type CreateTeammateRequest = {
   name: string;
 };
+
+export type CreateTeammateResponse = {
+  teammate: Teammate;
+};
+
 export async function createTeammate(
   request: CreateTeammateRequest,
-): Promise<ApiResponse<[]>> {
-  const response = await postData<[]>(
+): Promise<ApiResponse<CreateTeammateResponse>> {
+  const response = await postData<CreateTeammateResponse>(
     `${import.meta.env.VITE_API_URL}/teammates`,
     JSON.stringify({ teammate: { name: request.name } }),
   );

@@ -12,15 +12,10 @@ type Inputs = {
   teammateName: string;
 };
 
-type AutocompleteOption = {
-  id: number;
-  label: string;
-};
-
 export default function TeammateSelector({
-  setTeammateId,
+  setTeammate,
 }: {
-  setTeammateId: React.Dispatch<React.SetStateAction<number>>;
+  setTeammate: React.Dispatch<React.SetStateAction<Teammate | undefined>>;
 }) {
   const {
     register,
@@ -30,48 +25,38 @@ export default function TeammateSelector({
     mode: 'onChange',
   });
 
-  const [teammates, setTeammates] = useState<AutocompleteOption[]>([]);
-  const [selectedTeammate, setSelectedTeammate] = useState<
-    AutocompleteOption | null | string
-  >(null);
+  const [teammates, setTeammates] = useState<Teammate[]>([]);
+  const [selectedTeammate, setSelectedTeammate] = useState<Teammate | string>(
+    '',
+  );
   const [inputValue, setInputValue] = useState('');
 
-  const handleAddTeammate = async () => {
-    if (
-      inputValue &&
-      !teammates.some((teammate) => teammate.label === inputValue)
-    ) {
-      const trimmedInput = inputValue.trimEnd();
-      const createResponse = await createTeammate({
-        name: trimmedInput,
-      });
-      if (createResponse.success) {
-        const updatedTeammatesResponse = await getTeammates();
-        if (updatedTeammatesResponse.success) {
-          hydrateAutoCompleteOptions(updatedTeammatesResponse.data.teammates);
-        }
-        setInputValue(trimmedInput);
-      }
-    }
-  };
-
   const filtered = teammates.filter((teammate) =>
-    teammate.label.toLowerCase().includes(inputValue.toLowerCase()),
+    teammate.name.toLowerCase().includes(inputValue.toLowerCase()),
   );
   const noResults = filtered.length === 0;
 
-  const hydrateAutoCompleteOptions = (teammates: Teammate[]) => {
-    const options: AutocompleteOption[] = teammates.map(({ id, name }) => {
-      return { id, label: name };
-    });
-    setTeammates(options);
+  const handleAddTeammate = async () => {
+    if (inputValue && noResults) {
+      const response = await createTeammate({
+        name: inputValue.trimEnd(),
+      });
+      if (response.success) {
+        const updatedTeammatesResponse = await getTeammates();
+        if (updatedTeammatesResponse.success) {
+          setTeammates(updatedTeammatesResponse.data.teammates);
+        }
+        setTeammate(response.data.teammate);
+        setInputValue(response.data.teammate.name);
+      }
+    }
   };
 
   useEffect(() => {
     async function getData() {
       const res = await getTeammates();
       if (res.success) {
-        hydrateAutoCompleteOptions(res.data.teammates);
+        setTeammates(res.data.teammates);
       }
     }
 
@@ -112,6 +97,9 @@ export default function TeammateSelector({
             helperText={errors.teammateName?.message}
           />
         )}
+        getOptionLabel={(teammate: Teammate | string) => {
+          return typeof teammate === 'string' ? teammate : teammate.name;
+        }}
         inputValue={inputValue}
         onInputChange={(_: React.SyntheticEvent, newInputValue) => {
           setInputValue(newInputValue);
@@ -119,12 +107,16 @@ export default function TeammateSelector({
         value={selectedTeammate}
         onChange={(
           _: React.SyntheticEvent,
-          newValue: AutocompleteOption | null | string,
+          teammate: Teammate | null | string,
         ) => {
-          setSelectedTeammate(newValue);
-          setTeammateId(
-            newValue && typeof newValue === 'object' ? newValue.id : 0,
-          );
+          if (teammate) {
+            setSelectedTeammate(teammate);
+            if (typeof teammate === 'object') {
+              setTeammate(teammate);
+            }
+          } else {
+            setTeammate(undefined);
+          }
         }}
       />
       <div className={styles.buttonWrapper}>

@@ -8,6 +8,10 @@ test.describe('Main Page Feedback Form', () => {
     });
 
     test('submit feedback shows success message', async ({ page }) => {
+        // Activate teammates list
+        await page.locator('form .MuiAutocomplete-root .MuiInputBase-root .MuiInputBase-input').click();
+        // Select a teammate
+        await page.locator('form .MuiPopper-root ul li').click();
 
         // Click the button using XPath
         await page.locator('xpath=//*[@id="root"]/form/button').click();
@@ -18,6 +22,10 @@ test.describe('Main Page Feedback Form', () => {
     });
 
     test('Click through the tabs and ensure the appropriate questions have loaded', async ({ page }) => {
+        // Activate teammates list
+        await page.locator('form .MuiAutocomplete-root .MuiInputBase-root .MuiInputBase-input').click();
+        // Select a teammate
+        await page.locator('form .MuiPopper-root ul li').click();
 
         await page.locator('text=COMMUNICATION').click();
         await expect(
