@@ -53,8 +53,8 @@ export default function FeedbackForm({ teammate }: { teammate: Teammate }) {
       });
       setToastMsg('Feedback submitted!');
       setToastOpen(true);
-    } catch {
-      setToastMsg('Submission failed.');
+    } catch (error) {
+      setToastMsg(`Submission failed: ${error}`);
       setToastOpen(true);
     } finally {
       setLoading(false);
