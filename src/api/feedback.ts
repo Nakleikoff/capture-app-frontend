@@ -90,10 +90,6 @@ export async function submitTeammateFeedback(
   const response = await apiRequest<
     SubmitTeammateFeedbackResponse,
     TeammateFeedbackBody
-  >(
-    `feedback/${request.teammateId}`,
-    { feedback: formattedFeedback },
-    'POST',
-  );
+  >(`feedback/${request.teammateId}`, { feedback: formattedFeedback }, 'POST');
   return response;
 }
