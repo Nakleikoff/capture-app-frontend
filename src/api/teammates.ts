@@ -10,16 +10,14 @@ export type TeammateResponse = {
 };
 
 export async function getTeammates(): Promise<ApiResponse<TeammateResponse>> {
-  const response = await apiRequest<TeammateResponse>(
-    `teammates`,
-  );
+  const response = await apiRequest<TeammateResponse>(`teammates`);
 
   return response;
 }
 
 export type CreateTeamMateBody = {
   teammate: {
-    name: string
+    name: string;
   };
 };
 
@@ -33,7 +31,7 @@ export async function createTeammate(
   const response = await apiRequest<CreateTeammateResponse, CreateTeamMateBody>(
     `teammates`,
     { teammate: { name } },
-    'POST'
+    'POST',
   );
 
   return response;

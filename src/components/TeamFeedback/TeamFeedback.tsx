@@ -56,7 +56,7 @@ export default function TeamFeedback({
                   <RadioGroup
                     {...field}
                     row
-                    onChange={e => field.onChange(Number(e.target.value))}
+                    onChange={(e) => field.onChange(Number(e.target.value))}
                   >
                     <FormControlLabel
                       className={styles.radioOption}

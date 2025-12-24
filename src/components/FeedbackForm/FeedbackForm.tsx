@@ -17,9 +17,10 @@ export type FormValues = {
   responses: FormFeedbackCategory[];
 };
 
-
 export default function FeedbackForm({ teammate }: { teammate: Teammate }) {
-  const [feedbackData, setFeedbackData] = useState<TeammateFeedback | null>(null);
+  const [feedbackData, setFeedbackData] = useState<TeammateFeedback | null>(
+    null,
+  );
   const [refreshKey, setRefreshKey] = useState(0);
 
   const categories = feedbackData?.feedback || [];
@@ -53,7 +54,7 @@ export default function FeedbackForm({ teammate }: { teammate: Teammate }) {
       });
       setToastMsg('Feedback submitted!');
       setToastOpen(true);
-      setRefreshKey((k) => k + 1); 
+      setRefreshKey((k) => k + 1);
     } catch (error) {
       setToastMsg(`Submission failed: ${error}`);
       setToastOpen(true);
