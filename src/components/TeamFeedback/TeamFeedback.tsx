@@ -9,11 +9,11 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
-import { type FeedbackCategory } from '../../api/feedback';
+import { type FormFeedbackCategory } from '../../api/feedback';
 import type { FormValues } from '../FeedbackForm/FeedbackForm';
 
 type ITeamFeedbackProps = {
-  category: FeedbackCategory;
+  category: FormFeedbackCategory;
   catIdx: number;
   control?: Control<FormValues>;
 };
