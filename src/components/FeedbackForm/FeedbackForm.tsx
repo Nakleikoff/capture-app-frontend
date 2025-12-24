@@ -11,12 +11,13 @@ import {
 import { useForm } from 'react-hook-form';
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
+import type { Teammate } from '../../api/teammates';
 
 export type FormValues = {
   responses: FeedbackCategory[];
 };
 
-export default function FeedbackForm({ teammateId }: { teammateId: number }) {
+export default function FeedbackForm({ teammate }: { teammate: Teammate }) {
   const [feedbackData, setFeedbackData] = useState<TeammateFeedback | null>(
     null,
   );
@@ -34,20 +35,20 @@ export default function FeedbackForm({ teammateId }: { teammateId: number }) {
 
   useEffect(() => {
     async function getData() {
-      const result = await getTeammateFeedback(teammateId);
+      const result = await getTeammateFeedback(teammate.id);
       if (result.success) {
         setFeedbackData(result.data);
         reset({ responses: result.data.feedback });
       }
     }
     getData();
-  }, [reset, teammateId]);
+  }, [reset, teammate]);
 
   const onSubmit = async (data: FormValues) => {
     setLoading(true);
     try {
       await submitTeammateFeedback({
-        teammateId: teammateId,
+        teammateId: teammate.id,
         feedback: data.responses,
       });
       setToastMsg('Feedback submitted!');
