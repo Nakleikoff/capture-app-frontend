@@ -1,8 +1,7 @@
-
 import { apiRequest, type ApiResponse } from './api-service';
 
 export type FormAnswer = {
-  value: number; 
+  value: number;
   comment?: string;
 };
 
@@ -23,7 +22,7 @@ export type FormFeedbackCategory = {
 };
 
 export type SubmittedAnswer = {
-  value: number; 
+  value: number;
   comment: string;
 };
 
@@ -54,9 +53,7 @@ export type TeammateFeedbackBody = {
 export async function getTeammateFeedback(
   teammateId: number,
 ): Promise<ApiResponse<TeammateFeedback>> {
-  const response = await apiRequest<TeammateFeedback>(
-    `feedback/${teammateId}`,
-  );
+  const response = await apiRequest<TeammateFeedback>(`feedback/${teammateId}`);
   return response;
 }
 
@@ -70,7 +67,9 @@ export async function submitTeammateFeedback(
         .filter(
           (q) =>
             q.answer &&
-            (q.answer.value === 1 || q.answer.value === 0 || q.answer.value === -1) &&
+            (q.answer.value === 1 ||
+              q.answer.value === 0 ||
+              q.answer.value === -1) &&
             typeof q.answer.comment === 'string' &&
             q.answer.comment.trim() !== '',
         )
@@ -84,10 +83,13 @@ export async function submitTeammateFeedback(
     }))
     .filter((cat) => cat.questions.length > 0);
 
-  const response = await apiRequest<SubmittedFeedbackCategory, TeammateFeedbackBody>(
+  const response = await apiRequest<
+    SubmittedFeedbackCategory,
+    TeammateFeedbackBody
+  >(
     `feedback/${request.teammateId}`,
     { feedback: [...formattedFeedback] },
-    'POST'
+    'POST',
   );
 
   return response;
