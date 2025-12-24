@@ -50,6 +50,7 @@ export default function TeamFeedback({
             <FormControl className={styles.radioControllerWapper}>
               <Controller
                 name={`responses.${catIdx}.questions.${qIdx}.answer.value`}
+                defaultValue={question.answer?.value ?? null}
                 control={control}
                 render={({ field }) => (
                   <RadioGroup {...field} row>
