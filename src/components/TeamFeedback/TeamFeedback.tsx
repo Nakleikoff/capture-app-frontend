@@ -78,7 +78,6 @@ export default function TeamFeedback({
             </FormControl>
             <Controller
               name={`responses.${catIdx}.questions.${qIdx}.answer.comment`}
-              defaultValue={question.answer?.comment ?? ''}
               control={control}
               render={({ field }) => (
                 <TextField
