@@ -1,4 +1,4 @@
-import { getData, postData, type ApiResponse } from './api-service';
+import { apiRequest, type ApiResponse } from './api-service';
 
 export type Teammate = {
   id: number;
@@ -10,15 +10,15 @@ export type TeammateResponse = {
 };
 
 export async function getTeammates(): Promise<ApiResponse<TeammateResponse>> {
-  const response = await getData<TeammateResponse>(
-    `${import.meta.env.VITE_API_URL}/teammates`,
-  );
+  const response = await apiRequest<TeammateResponse>(`teammates`);
 
   return response;
 }
 
-export type CreateTeammateRequest = {
-  name: string;
+export type CreateTeamMateBody = {
+  teammate: {
+    name: string;
+  };
 };
 
 export type CreateTeammateResponse = {
@@ -26,11 +26,12 @@ export type CreateTeammateResponse = {
 };
 
 export async function createTeammate(
-  request: CreateTeammateRequest,
+  name: string,
 ): Promise<ApiResponse<CreateTeammateResponse>> {
-  const response = await postData<CreateTeammateResponse>(
-    `${import.meta.env.VITE_API_URL}/teammates`,
-    JSON.stringify({ teammate: { name: request.name } }),
+  const response = await apiRequest<CreateTeammateResponse, CreateTeamMateBody>(
+    `teammates`,
+    { teammate: { name } },
+    'POST',
   );
 
   return response;

@@ -38,9 +38,7 @@ export default function TeammateSelector({
 
   const handleAddTeammate = async () => {
     if (inputValue && noResults) {
-      const response = await createTeammate({
-        name: inputValue.trimEnd(),
-      });
+      const response = await createTeammate(inputValue.trimEnd());
       if (response.success) {
         const updatedTeammatesResponse = await getTeammates();
         if (updatedTeammatesResponse.success) {
