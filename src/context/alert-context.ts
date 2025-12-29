@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from 'react';
+import { createContext, useContext } from 'react';
 
 interface AlertContext {
   setAlert: (alertMessage: string, error?: boolean) => void;
