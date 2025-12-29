@@ -4,8 +4,8 @@ import { useEffect, useState } from 'react';
 import {
   getTeammateFeedback,
   submitTeammateFeedback,
-  type FeedbackCategory,
-  type Question,
+  type FormFeedbackCategory,
+  type FormQuestion,
   type TeammateFeedback,
 } from '../../api/feedback';
 import { useForm } from 'react-hook-form';
@@ -14,13 +14,14 @@ import Alert from '@mui/material/Alert';
 import type { Teammate } from '../../api/teammates';
 
 export type FormValues = {
-  responses: FeedbackCategory[];
+  responses: FormFeedbackCategory[];
 };
 
 export default function FeedbackForm({ teammate }: { teammate: Teammate }) {
   const [feedbackData, setFeedbackData] = useState<TeammateFeedback | null>(
     null,
   );
+  const [refreshKey, setRefreshKey] = useState(0);
 
   const categories = feedbackData?.feedback || [];
   const [loading, setLoading] = useState(false);
@@ -42,7 +43,7 @@ export default function FeedbackForm({ teammate }: { teammate: Teammate }) {
       }
     }
     getData();
-  }, [reset, teammate]);
+  }, [reset, teammate, refreshKey]);
 
   const onSubmit = async (data: FormValues) => {
     setLoading(true);
@@ -53,15 +54,16 @@ export default function FeedbackForm({ teammate }: { teammate: Teammate }) {
       });
       setToastMsg('Feedback submitted!');
       setToastOpen(true);
+      setRefreshKey((k) => k + 1);
     } catch {
-      setToastMsg('Submission failed.');
+      setToastMsg(`Submission failed.`);
       setToastOpen(true);
     } finally {
       setLoading(false);
     }
   };
 
-  const renderQuestionsAnswered = (questions: Question[]) => {
+  const renderQuestionsAnswered = (questions: FormQuestion[]) => {
     const answered = questions.reduce((accumulator, question) => {
       return (
         accumulator +
