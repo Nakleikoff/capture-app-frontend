@@ -20,29 +20,21 @@ type ITeamFeedbackProps = {
 
 export default function TeamFeedback({
   category,
-            <Controller
-              name={`responses.${catIdx}.questions.${qIdx}.answer.comment`}
-              control={control}
-              rules={{
-                required:
-                  watchedQuestions?.[qIdx]?.answer?.value != null
-                    ? 'Notes are required when a selection is made'
-                    : false,
-              }}
-              render={({ field, fieldState }) => (
-                <TextField
-                  {...field}
-                  disabled={watchedQuestions?.[qIdx]?.answer?.value == null}
-                  label="Notes (optional)"
-                  multiline
-                  rows={4}
-                  fullWidth
-                  InputLabelProps={{ shrink: true }}
-                  error={!!fieldState.error}
-                  helperText={fieldState.error?.message}
-                />
-              )}
-            />
+  control,
+  catIdx,
+}: ITeamFeedbackProps) {
+  const watchedQuestions = useWatch({
+    control,
+    name: `responses.${catIdx}.questions`,
+  });
+  return (
+    <div>
+      {category.questions.map((question, qIdx) => (
+        <ExpandableSection
+          key={question.id}
+          header={
+            <Typography variant="h6" component="div">
+              {question.text}
             </Typography>
           }
         >
