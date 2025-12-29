@@ -1,15 +1,12 @@
+import { useState } from 'react';
+import AlertContext from './alert-context';
 import { Alert, Snackbar } from '@mui/material';
-import { createContext, useContext, useState } from 'react';
 
-interface AlertContext {
-  setAlert: (alertMessage: string, error?: boolean) => void;
-}
-
-const AlertContext = createContext<AlertContext>({
-  setAlert: () => {},
-});
-
-export const AlertProvider = ({ children }: { children: React.ReactNode }) => {
+export default function AlertProvider({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   const [message, setMessage] = useState('');
   const [isError, setIsError] = useState(false);
   const [toastOpen, setToastOpen] = useState(false);
@@ -39,8 +36,4 @@ export const AlertProvider = ({ children }: { children: React.ReactNode }) => {
       {children}
     </AlertContext.Provider>
   );
-};
-
-export const useAlert = () => useContext(AlertContext);
-
-export default AlertContext;
+}
