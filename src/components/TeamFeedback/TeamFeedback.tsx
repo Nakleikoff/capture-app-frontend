@@ -20,21 +20,29 @@ type ITeamFeedbackProps = {
 
 export default function TeamFeedback({
   category,
-  control,
-  catIdx,
-}: ITeamFeedbackProps) {
-  const watchedQuestions = useWatch({
-    control,
-    name: `responses.${catIdx}.questions`,
-  });
-  return (
-    <div>
-      {category.questions.map((question, qIdx) => (
-        <ExpandableSection
-          key={question.id}
-          header={
-            <Typography variant="h6" component="div">
-              {question.text}
+            <Controller
+              name={`responses.${catIdx}.questions.${qIdx}.answer.comment`}
+              control={control}
+              rules={{
+                required:
+                  watchedQuestions?.[qIdx]?.answer?.value != null
+                    ? 'Notes are required when a selection is made'
+                    : false,
+              }}
+              render={({ field, fieldState }) => (
+                <TextField
+                  {...field}
+                  disabled={watchedQuestions?.[qIdx]?.answer?.value == null}
+                  label="Notes (optional)"
+                  multiline
+                  rows={4}
+                  fullWidth
+                  InputLabelProps={{ shrink: true }}
+                  error={!!fieldState.error}
+                  helperText={fieldState.error?.message}
+                />
+              )}
+            />
             </Typography>
           }
         >
@@ -54,25 +62,29 @@ export default function TeamFeedback({
                 control={control}
                 render={({ field }) => (
                   <RadioGroup
-                    {...field}
                     row
-                    onChange={(e) => field.onChange(Number(e.target.value))}
+                    value={field.value ?? ''}
+                    onChange={(e) => {
+                      const v =
+                        e.target.value === '' ? null : Number(e.target.value);
+                      field.onChange(v);
+                    }}
                   >
                     <FormControlLabel
                       className={styles.radioOption}
-                      value={1}
+                      value="1"
                       control={<Radio />}
                       label="Yes"
                     />
                     <FormControlLabel
                       className={styles.radioOption}
-                      value={-1}
+                      value="-1"
                       control={<Radio />}
                       label="No"
                     />
                     <FormControlLabel
                       className={styles.radioOption}
-                      value={0}
+                      value="0"
                       control={<Radio />}
                       label="Not Sure"
                     />
@@ -86,8 +98,8 @@ export default function TeamFeedback({
               render={({ field }) => (
                 <TextField
                   {...field}
-                  disabled={!watchedQuestions?.[qIdx]?.answer?.value}
-                  label="Notes (optional)"
+                  disabled={watchedQuestions?.[qIdx]?.answer?.value == null}
+                  label="Notes"
                   multiline
                   rows={4}
                   fullWidth
