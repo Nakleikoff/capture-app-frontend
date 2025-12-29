@@ -21,7 +21,7 @@ export const AlertProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   return (
-    <AlertContext value={{ setAlert }}>
+    <AlertContext.Provider value={{ setAlert }}>
       <Snackbar
         open={toastOpen}
         autoHideDuration={3000}
@@ -37,7 +37,7 @@ export const AlertProvider = ({ children }: { children: React.ReactNode }) => {
         </Alert>
       </Snackbar>
       {children}
-    </AlertContext>
+    </AlertContext.Provider>
   );
 };
 
