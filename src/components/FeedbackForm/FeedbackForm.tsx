@@ -9,8 +9,6 @@ import {
   type TeammateFeedback,
 } from '../../api/feedback';
 import { useForm } from 'react-hook-form';
-import Snackbar from '@mui/material/Snackbar';
-import Alert from '@mui/material/Alert';
 import type { Teammate } from '../../api/teammates';
 import { useAlert } from '../../context/alert-context';
 
