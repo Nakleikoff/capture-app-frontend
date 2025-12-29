@@ -54,25 +54,29 @@ export default function TeamFeedback({
                 control={control}
                 render={({ field }) => (
                   <RadioGroup
-                    {...field}
                     row
-                    onChange={(e) => field.onChange(Number(e.target.value))}
+                    value={field.value ?? ''}
+                    onChange={(e) => {
+                      const v =
+                        e.target.value === '' ? null : Number(e.target.value);
+                      field.onChange(v);
+                    }}
                   >
                     <FormControlLabel
                       className={styles.radioOption}
-                      value={1}
+                      value="1"
                       control={<Radio />}
                       label="Yes"
                     />
                     <FormControlLabel
                       className={styles.radioOption}
-                      value={-1}
+                      value="-1"
                       control={<Radio />}
                       label="No"
                     />
                     <FormControlLabel
                       className={styles.radioOption}
-                      value={0}
+                      value="0"
                       control={<Radio />}
                       label="Not Sure"
                     />
@@ -83,15 +87,25 @@ export default function TeamFeedback({
             <Controller
               name={`responses.${catIdx}.questions.${qIdx}.answer.comment`}
               control={control}
-              render={({ field }) => (
+              rules={
+                watchedQuestions?.[qIdx]?.answer?.value == null
+                  ? {}
+                  : {
+                      required:
+                        "Please add a comment about your teammate's performance.",
+                    }
+              }
+              render={({ field, fieldState }) => (
                 <TextField
                   {...field}
-                  disabled={!watchedQuestions?.[qIdx]?.answer?.value}
-                  label="Notes (optional)"
+                  disabled={watchedQuestions?.[qIdx]?.answer?.value == null}
+                  label="Notes"
                   multiline
                   rows={4}
                   fullWidth
                   InputLabelProps={{ shrink: true }}
+                  helperText={fieldState.error?.message}
+                  error={!!fieldState.error?.message}
                 />
               )}
             />
