@@ -7,6 +7,7 @@ import {
   getTeammates,
   type Teammate,
 } from '../../api/teammates';
+import { useAlert } from '../../context/alert-context';
 
 type Inputs = {
   teammateName: string;
@@ -30,7 +31,7 @@ export default function TeammateSelector({
     '',
   );
   const [inputValue, setInputValue] = useState('');
-
+  const { setAlert } = useAlert();
   const filtered = teammates.filter((teammate) =>
     teammate.name.toLowerCase().includes(inputValue.toLowerCase()),
   );
@@ -40,12 +41,15 @@ export default function TeammateSelector({
     if (inputValue && noResults) {
       const response = await createTeammate(inputValue.trimEnd());
       if (response.success) {
+        setAlert('Teammate Added.');
         const updatedTeammatesResponse = await getTeammates();
         if (updatedTeammatesResponse.success) {
           setTeammates(updatedTeammatesResponse.data.teammates);
         }
         setTeammate(response.data.teammate);
         setInputValue(response.data.teammate.name);
+      } else {
+        setAlert("Couldn't add teammate.", true);
       }
     }
   };
@@ -61,7 +65,7 @@ export default function TeammateSelector({
     }
 
     getData();
-  }, []);
+  }, [setTeammate]);
 
   return (
     <form

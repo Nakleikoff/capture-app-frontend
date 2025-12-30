@@ -9,9 +9,8 @@ import {
   type TeammateFeedback,
 } from '../../api/feedback';
 import { useForm } from 'react-hook-form';
-import Snackbar from '@mui/material/Snackbar';
-import Alert from '@mui/material/Alert';
 import type { Teammate } from '../../api/teammates';
+import { useAlert } from '../../context/alert-context';
 
 export type FormValues = {
   responses: FormFeedbackCategory[];
@@ -25,9 +24,7 @@ export default function FeedbackForm({ teammate }: { teammate: Teammate }) {
 
   const categories = feedbackData?.feedback || [];
   const [loading, setLoading] = useState(false);
-  const [toastOpen, setToastOpen] = useState(false);
-  const [toastMsg, setToastMsg] = useState('');
-
+  const { setAlert } = useAlert();
   const { handleSubmit, control, reset } = useForm<FormValues>({
     defaultValues: {
       responses: categories,
@@ -52,12 +49,10 @@ export default function FeedbackForm({ teammate }: { teammate: Teammate }) {
         teammateId: teammate.id,
         feedback: data.responses,
       });
-      setToastMsg('Feedback submitted!');
-      setToastOpen(true);
+      setAlert('Feedback submitted!');
       setRefreshKey((k) => k + 1);
     } catch {
-      setToastMsg(`Submission failed.`);
-      setToastOpen(true);
+      setAlert(`Submission failed.`, true);
     } finally {
       setLoading(false);
     }
@@ -92,20 +87,6 @@ export default function FeedbackForm({ teammate }: { teammate: Teammate }) {
       <button type="submit" disabled={loading}>
         {loading ? 'Submitting...' : 'Submit'}
       </button>
-      <Snackbar
-        open={toastOpen}
-        autoHideDuration={3000}
-        onClose={() => setToastOpen(false)}
-        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
-      >
-        <Alert
-          onClose={() => setToastOpen(false)}
-          severity="success"
-          sx={{ width: '100%' }}
-        >
-          {toastMsg}
-        </Alert>
-      </Snackbar>
     </form>
   );
 }
