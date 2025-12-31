@@ -1,12 +1,4 @@
-<<<<<<< HEAD
-<<<<<<< HEAD
 import { useCallback, useState } from 'react';
-=======
-import React, { useCallback, useState } from 'react';
->>>>>>> c7ad6e7 (create useFeedbackForm hook)
-=======
-import { useCallback, useState } from 'react';
->>>>>>> 43bf292 (create useTeammateSelector hook)
 import {
   getTeammateFeedback,
   submitTeammateFeedback,

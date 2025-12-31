@@ -35,7 +35,8 @@ export async function apiRequest<RES, REQ = undefined>(
     const { success, data } = await response.json();
 
     return { success, data };
-  } catch (error: any) {
+  } catch (err) {
+    const error = err as Error;
     const message = error?.message ?? 'Network error';
     return { success: false, error: { code: 'NETWORK_ERROR', message } };
   }
