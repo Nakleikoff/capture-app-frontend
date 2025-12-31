@@ -44,18 +44,25 @@ export default function FeedbackForm({ teammate }: { teammate: Teammate }) {
 
   const onSubmit = async (data: FormValues) => {
     setLoading(true);
-    try {
-      await submitTeammateFeedback({
-        teammateId: teammate.id,
-        feedback: data.responses,
-      });
-      setAlert('Feedback submitted!');
-      setRefreshKey((k) => k + 1);
-    } catch {
-      setAlert(`Submission failed.`, true);
-    } finally {
+
+    const response = await submitTeammateFeedback({
+      teammateId: teammate.id,
+      feedback: data.responses,
+    });
+
+    if (!response.success) {
+      setAlert(
+        `Couldn't submit feedback. ${response.error?.message ?? ''}`,
+        true,
+      );
       setLoading(false);
+      return;
     }
+
+    setAlert('Feedback submitted!');
+    setRefreshKey((k) => k + 1);
+
+    setLoading(false);
   };
 
   const renderQuestionsAnswered = (questions: FormQuestion[]) => {

@@ -45,11 +45,17 @@ export default function TeammateSelector({
         const updatedTeammatesResponse = await getTeammates();
         if (updatedTeammatesResponse.success) {
           setTeammates(updatedTeammatesResponse.data.teammates);
+        } else {
+          setAlert(
+            updatedTeammatesResponse.error?.message ??
+              "Couldn't refresh teammates.",
+            true,
+          );
         }
         setTeammate(response.data.teammate);
-        setInputValue(response.data.teammate.name);
+        setInputValue(response.data.teammate.name ?? '');
       } else {
-        setAlert("Couldn't add teammate.", true);
+        setAlert(response.error?.message ?? "Couldn't add teammate.", true);
       }
     }
   };
@@ -58,9 +64,17 @@ export default function TeammateSelector({
     async function getData() {
       const res = await getTeammates();
       if (res.success) {
-        setTeammates(res.data.teammates);
-        setTeammate(res.data.teammates[0] ?? null);
-        setInputValue(res.data.teammates[0].name ?? '');
+        const list = res.data.teammates ?? [];
+        setTeammates(list);
+        if (list.length > 0) {
+          setTeammate(list[0]);
+          setInputValue(list[0].name ?? '');
+        } else {
+          setTeammate(undefined);
+          setInputValue('');
+        }
+      } else {
+        setAlert(`Failed to load teammates. ${res.error?.message ?? ''}`, true);
       }
     }
 
