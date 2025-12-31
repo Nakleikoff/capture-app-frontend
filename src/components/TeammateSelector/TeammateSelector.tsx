@@ -40,11 +40,44 @@ export default function TeammateSelector({
 
   const handleAddTeammate = async () => {
     if (inputValue && noResults) {
-      addTeammate(inputValue);
+      const response = await createTeammate(inputValue.trimEnd());
+      if (response.success) {
+        setAlert('Teammate Added.');
+        const updatedTeammatesResponse = await getTeammates();
+        if (updatedTeammatesResponse.success) {
+          setTeammates(updatedTeammatesResponse.data.teammates);
+        } else {
+          setAlert(
+            updatedTeammatesResponse.error?.message ??
+              "Couldn't refresh teammates.",
+            true,
+          );
+        }
+        setTeammate(response.data.teammate);
+        setInputValue(response.data.teammate.name ?? '');
+      } else {
+        setAlert(response.error?.message ?? "Couldn't add teammate.", true);
+      }
     }
   };
 
   useEffect(() => {
+    async function getData() {
+      const res = await getTeammates();
+      if (res.success) {
+        const list = res.data.teammates ?? [];
+        setTeammates(list);
+        if (list.length > 0) {
+          setTeammate(list[0]);
+          setInputValue(list[0].name ?? '');
+        } else {
+          setTeammate(undefined);
+          setInputValue('');
+        }
+      } else {
+        setAlert(`Failed to load teammates. ${res.error?.message ?? ''}`, true);
+      }
+    }
     getData();
   }, [setTeammate]);
 
