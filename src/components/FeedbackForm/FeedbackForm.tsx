@@ -29,7 +29,9 @@ export default function FeedbackForm({ teammate }: { teammate: Teammate }) {
   }, [getData, teammate.id, refreshKey]);
 
   useEffect(() => {
-    if (feedbackData) reset({ responses: feedbackData.feedback });
+    if (feedbackData) {
+      reset({ responses: feedbackData.feedback });
+    }
   }, [feedbackData, reset]);
   const onSubmit = async (data: FormValues) => {
     await submitFeedback(teammate.id, data.responses);

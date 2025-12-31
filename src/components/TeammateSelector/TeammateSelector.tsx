@@ -8,6 +8,7 @@ import {
   type Teammate,
 } from '../../api/teammates';
 import { useAlert } from '../../context/alert-context';
+import useTeammateSelector from './hooks/useTeammateSelector';
 
 type Inputs = {
   teammateName: string;
@@ -25,13 +26,13 @@ export default function TeammateSelector({
   } = useForm<Inputs>({
     mode: 'onChange',
   });
-
-  const [teammates, setTeammates] = useState<Teammate[]>([]);
+  const { getData, addTeammate, teammates, defaultName, teammate } =
+    useTeammateSelector();
   const [selectedTeammate, setSelectedTeammate] = useState<Teammate | string>(
     '',
   );
   const [inputValue, setInputValue] = useState('');
-  const { setAlert } = useAlert();
+
   const filtered = teammates.filter((teammate) =>
     teammate.name.toLowerCase().includes(inputValue.toLowerCase()),
   );
@@ -39,47 +40,25 @@ export default function TeammateSelector({
 
   const handleAddTeammate = async () => {
     if (inputValue && noResults) {
-      const response = await createTeammate(inputValue.trimEnd());
-      if (response.success) {
-        setAlert('Teammate Added.');
-        const updatedTeammatesResponse = await getTeammates();
-        if (updatedTeammatesResponse.success) {
-          setTeammates(updatedTeammatesResponse.data.teammates);
-        } else {
-          setAlert(
-            updatedTeammatesResponse.error?.message ??
-              "Couldn't refresh teammates.",
-            true,
-          );
-        }
-        setTeammate(response.data.teammate);
-        setInputValue(response.data.teammate.name ?? '');
-      } else {
-        setAlert(response.error?.message ?? "Couldn't add teammate.", true);
-      }
+      addTeammate(inputValue);
     }
   };
 
   useEffect(() => {
-    async function getData() {
-      const res = await getTeammates();
-      if (res.success) {
-        const list = res.data.teammates ?? [];
-        setTeammates(list);
-        if (list.length > 0) {
-          setTeammate(list[0]);
-          setInputValue(list[0].name ?? '');
-        } else {
-          setTeammate(undefined);
-          setInputValue('');
-        }
-      } else {
-        setAlert(`Failed to load teammates. ${res.error?.message ?? ''}`, true);
-      }
-    }
-
     getData();
   }, [setTeammate]);
+
+  useEffect(() => {
+    if (teammate) {
+      setTeammate(teammate);
+    }
+  }, [teammate]);
+
+  useEffect(() => {
+    if (defaultName) {
+      setInputValue(defaultName);
+    }
+  }, [defaultName]);
 
   return (
     <form
