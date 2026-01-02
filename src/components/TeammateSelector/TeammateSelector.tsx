@@ -49,7 +49,6 @@ export default function TeammateSelector({
       onSubmit={handleSubmit(handleAddTeammate)}
     >
       <Autocomplete
-        key={teammate?.id}
         disablePortal
         freeSolo
         options={teammates}
