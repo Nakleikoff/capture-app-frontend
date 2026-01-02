@@ -2,12 +2,7 @@ import { useEffect, useState } from 'react';
 import styles from './TeammateSelector.module.scss';
 import { Autocomplete, Button, TextField } from '@mui/material';
 import { useForm } from 'react-hook-form';
-import {
-  createTeammate,
-  getTeammates,
-  type Teammate,
-} from '../../api/teammates';
-import { useAlert } from '../../context/alert-context';
+import { type Teammate } from '../../api/teammates';
 import useTeammateSelector from './hooks/useTeammateSelector';
 
 type Inputs = {
@@ -31,7 +26,7 @@ export default function TeammateSelector({
   const [selectedTeammate, setSelectedTeammate] = useState<Teammate | string>(
     '',
   );
-  const [inputValue, setInputValue] = useState('');
+  const [inputValue, setInputValue] = useState(defaultName);
 
   const filtered = teammates.filter((teammate) =>
     teammate.name.toLowerCase().includes(inputValue.toLowerCase()),
@@ -46,7 +41,13 @@ export default function TeammateSelector({
 
   useEffect(() => {
     getData();
-  }, [setTeammate]);
+  });
+
+  useEffect(() => {
+    if (teammate) {
+      setTeammate(teammate);
+    }
+  }, [teammate, setTeammate]);
 
   useEffect(() => {
     if (teammate) {

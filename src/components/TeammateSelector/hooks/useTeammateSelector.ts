@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useState } from 'react';
 import {
   createTeammate,
   getTeammates,
@@ -12,7 +12,7 @@ function useTeammateSelector() {
   const [teammate, setTeammate] = useState<Teammate>();
   const { setAlert } = useAlert();
 
-  const getData = useCallback(async () => {
+  const getData = async () => {
     const res = await getTeammates();
     if (res.success) {
       const list = res.data.teammates ?? [];
@@ -27,9 +27,9 @@ function useTeammateSelector() {
     } else {
       setAlert(`Failed to load teammates. ${res.error?.message ?? ''}`, true);
     }
-  }, []);
+  };
 
-  const addTeammate = useCallback(async (teammateName: string) => {
+  const addTeammate = async (teammateName: string) => {
     const response = await createTeammate(teammateName.trimEnd());
     if (response.success) {
       setAlert('Teammate Added.');
@@ -48,7 +48,7 @@ function useTeammateSelector() {
     } else {
       setAlert(response.error?.message ?? "Couldn't add teammate.", true);
     }
-  }, []);
+  };
 
   return { getData, addTeammate, teammates, defaultName, teammate };
 }
