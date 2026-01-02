@@ -10,7 +10,7 @@ function App() {
 
   return (
     <AlertProvider>
-      <TeammateSelector setTeammate={setTeammate} />
+      <TeammateSelector setParentTeammate={setTeammate} />
       {teammate && <FeedbackForm teammate={teammate} />}
     </AlertProvider>
   );

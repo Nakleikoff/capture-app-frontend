@@ -2,21 +2,17 @@ import { useEffect, useState } from 'react';
 import styles from './TeammateSelector.module.scss';
 import { Autocomplete, Button, TextField } from '@mui/material';
 import { useForm } from 'react-hook-form';
-import {
-  createTeammate,
-  getTeammates,
-  type Teammate,
-} from '../../api/teammates';
-import { useAlert } from '../../context/alert-context';
+import { type Teammate } from '../../api/teammates';
+import useTeammateSelector from './hooks/useTeammateSelector';
 
 type Inputs = {
   teammateName: string;
 };
 
 export default function TeammateSelector({
-  setTeammate,
+  setParentTeammate,
 }: {
-  setTeammate: React.Dispatch<React.SetStateAction<Teammate | undefined>>;
+  setParentTeammate: React.Dispatch<React.SetStateAction<Teammate | undefined>>;
 }) {
   const {
     register,
@@ -25,13 +21,11 @@ export default function TeammateSelector({
   } = useForm<Inputs>({
     mode: 'onChange',
   });
+  const { addTeammate, teammates, teammate, setTeammate } =
+    useTeammateSelector();
 
-  const [teammates, setTeammates] = useState<Teammate[]>([]);
-  const [selectedTeammate, setSelectedTeammate] = useState<Teammate | string>(
-    '',
-  );
   const [inputValue, setInputValue] = useState('');
-  const { setAlert } = useAlert();
+
   const filtered = teammates.filter((teammate) =>
     teammate.name.toLowerCase().includes(inputValue.toLowerCase()),
   );
@@ -39,33 +33,15 @@ export default function TeammateSelector({
 
   const handleAddTeammate = async () => {
     if (inputValue && noResults) {
-      const response = await createTeammate(inputValue.trimEnd());
-      if (response.success) {
-        setAlert('Teammate Added.');
-        const updatedTeammatesResponse = await getTeammates();
-        if (updatedTeammatesResponse.success) {
-          setTeammates(updatedTeammatesResponse.data.teammates);
-        }
-        setTeammate(response.data.teammate);
-        setInputValue(response.data.teammate.name);
-      } else {
-        setAlert("Couldn't add teammate.", true);
-      }
+      addTeammate(inputValue);
     }
   };
 
   useEffect(() => {
-    async function getData() {
-      const res = await getTeammates();
-      if (res.success) {
-        setTeammates(res.data.teammates);
-        setTeammate(res.data.teammates[0] ?? null);
-        setInputValue(res.data.teammates[0].name ?? '');
-      }
+    if (teammate) {
+      setParentTeammate(teammate);
     }
-
-    getData();
-  }, [setTeammate]);
+  }, [teammate, setParentTeammate]);
 
   return (
     <form
@@ -108,18 +84,13 @@ export default function TeammateSelector({
         onInputChange={(_: React.SyntheticEvent, newInputValue) => {
           setInputValue(newInputValue);
         }}
-        value={selectedTeammate}
+        value={teammate ?? null}
         onChange={(
           _: React.SyntheticEvent,
           teammate: Teammate | null | string,
         ) => {
-          if (teammate) {
-            setSelectedTeammate(teammate);
-            if (typeof teammate === 'object') {
-              setTeammate(teammate);
-            }
-          } else {
-            setTeammate(undefined);
+          if (typeof teammate === 'object') {
+            setTeammate(teammate ?? undefined);
           }
         }}
       />

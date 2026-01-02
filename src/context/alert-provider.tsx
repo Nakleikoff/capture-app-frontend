@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import AlertContext from './alert-context';
 import { Alert, Snackbar } from '@mui/material';
 
@@ -11,11 +11,14 @@ export default function AlertProvider({
   const [isError, setIsError] = useState(false);
   const [toastOpen, setToastOpen] = useState(false);
 
-  const setAlert = (alertMessage: string, error: boolean = false) => {
-    setMessage(alertMessage);
-    setIsError(error);
-    setToastOpen(true);
-  };
+  const setAlert = useCallback(
+    (alertMessage: string, error: boolean = false) => {
+      setMessage(alertMessage);
+      setIsError(error);
+      setToastOpen(true);
+    },
+    [],
+  );
 
   return (
     <AlertContext.Provider value={{ setAlert }}>
