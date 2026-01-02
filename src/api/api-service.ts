@@ -2,6 +2,8 @@ export type ApiResponse<T> =
   | { success: true; data: T }
   | { success: false; error: { message: string } };
 
+const jwt = document.getElementById('app-init')?.getAttribute('data-jwt');
+
 export async function apiRequest<RES, REQ = undefined>(
   input: RequestInfo,
   body?: REQ,
@@ -10,7 +12,7 @@ export async function apiRequest<RES, REQ = undefined>(
   const headers: Record<string, string> = {
     'Content-Type': 'application/json',
     Accept: 'application/json',
-    Authorization: `Bearer ${import.meta.env.VITE_API_JWT_TOKEN}`,
+    Authorization: `Bearer ${jwt}`,
   };
 
   const initialize = {
